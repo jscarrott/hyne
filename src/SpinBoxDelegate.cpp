@@ -88,10 +88,10 @@ QWidget *SpinBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
 			}
 			break;
 		case ComboBoxDraw:
-			comboBox->addItem(tr("Pleine"));
-			comboBox->addItem(tr("Moitié pleine"));
-			comboBox->addItem(tr("Vide"));
-			comboBox->addItem(tr("Épuisée"));
+			comboBox->addItem(tr("Filled"));
+			comboBox->addItem(tr("Half-filled"));
+			comboBox->addItem(tr("Empty"));
+			comboBox->addItem(tr("Completely empty"));
 			break;
 		default:break;
 		}

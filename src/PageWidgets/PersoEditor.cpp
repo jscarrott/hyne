@@ -92,19 +92,19 @@ void PersoEditor::buildWidget()
 	persoListe->setFixedHeight(57);
 	persoListe->setWrapping(false);
 	persoListe->setMovement(QListView::Static);
-	
+
 	tabWidget = new QTabWidget(this);
-	tabWidget->addTab(buildPage1(), tr("État"));
+	tabWidget->addTab(buildPage1(), tr("Status"));
 	tabWidget->addTab(buildPage2(), tr("G-Forces"));
-	tabWidget->addTab(buildPage3(), tr("Magies"));
-	tabWidget->addTab(buildPage4(), tr("Capacités"));
-	tabWidget->addTab(buildPage5(), tr("Associations"));
+	tabWidget->addTab(buildPage3(), tr("Magics"));
+	tabWidget->addTab(buildPage4(), tr("Abilities"));
+	tabWidget->addTab(buildPage5(), tr("Junction"));
 	lbWidget = new QWidget(this);
 	tabWidget->addTab(lbWidget, tr("Limit Break"));
-	
+
 	layout->addWidget(persoListe);
 	layout->addWidget(tabWidget);
-	
+
 	for (quint8 i = 0; i < 8; ++i)
 	{
 		QListWidgetItem *item = new QListWidgetItem(persoListe);
@@ -115,48 +115,48 @@ void PersoEditor::buildWidget()
 	}
 
 	persoListe->setCurrentRow(0);
-	
+
 	connect(persoListe, SIGNAL(currentRowChanged(int)), SLOT(fillPage()));
 }
 
 QWidget *PersoEditor::buildPage1()
 {
 	QWidget *ret = new QWidget(this);
-	
+
 	existsE = new QCheckBox(ret);
 	connect(existsE, SIGNAL(toggled(bool)), SLOT(changeExists(bool)));
 	nameE = new QLineEdit(ret);
 	current_HPsE = new SpinBox16(ret);
-	
+
 	QHBoxLayout *mainEdit_l = new QHBoxLayout;
-	mainEdit_l->addWidget(new QLabel(tr("Disponible"), ret));
+	mainEdit_l->addWidget(new QLabel(tr("Available"), ret));
 	mainEdit_l->addWidget(existsE);
-	mainEdit_l->addWidget(new QLabel(tr("Nom :"), ret));
+	mainEdit_l->addWidget(new QLabel(tr("Name:"), ret));
 	mainEdit_l->addWidget(nameE);
-	mainEdit_l->addWidget(new QLabel(tr("HP actuels :"), ret));
+	mainEdit_l->addWidget(new QLabel(tr("Current HP:"), ret));
 	mainEdit_l->addWidget(current_HPsE);
-	
+
 	expE = new SpinBox32(ret);
 	connect(expE, SIGNAL(valueChanged(double)), SLOT(exp_S(double)));
 	nivE = new QSpinBox(ret);
 	nivE->setRange(1, 100);
 	connect(nivE, SIGNAL(valueChanged(int)), SLOT(niv_S(int)));
-	
+
 	QHBoxLayout *mainEdit2_l = new QHBoxLayout;
-	mainEdit2_l->addWidget(new QLabel(tr("Niveau :"), ret));
+	mainEdit2_l->addWidget(new QLabel(tr("Level:"), ret));
 	mainEdit2_l->addWidget(nivE);
-	mainEdit2_l->addWidget(new QLabel(tr("EXP :"), ret));
+	mainEdit2_l->addWidget(new QLabel(tr("EXP:"), ret));
 	mainEdit2_l->addWidget(expE);
-	
+
 	kills_E = new SpinBox16(ret);
 	kos_E = new SpinBox16(ret);
-	
+
 	QHBoxLayout *statsEdit_l = new QHBoxLayout;
-	statsEdit_l->addWidget(new QLabel(tr("Tués :"), ret));
+	statsEdit_l->addWidget(new QLabel(tr("Kills:"), ret));
 	statsEdit_l->addWidget(kills_E);
-	statsEdit_l->addWidget(new QLabel(tr("Mort :"), ret));
+	statsEdit_l->addWidget(new QLabel(tr("KOs:"), ret));
 	statsEdit_l->addWidget(kos_E);
-	
+
 	id_E = new QComboBox(ret);
 	id_E->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	for (quint8 i = 0; i < 11; ++i)
@@ -168,18 +168,18 @@ QWidget *PersoEditor::buildPage1()
 		weapon_E->addItem(QIcon(QString(":/images/icons/weapon%1.png").arg(i,2,10,QChar('0'))), Data::weapons().at(i), i);
 	for (quint8 i = 28; i < 33; ++i)
 		weapon_E->addItem(Data::weapons().at(i), i);
-	
+
 	QHBoxLayout *statsEdit2_l = new QHBoxLayout;
-	statsEdit2_l->addWidget(new QLabel(tr("Personnage :"), ret));
+	statsEdit2_l->addWidget(new QLabel(tr("Body:"), ret));
 	statsEdit2_l->addWidget(id_E);
-	statsEdit2_l->addWidget(new QLabel(tr("Arme :"), ret));
+	statsEdit2_l->addWidget(new QLabel(tr("Weapon:"), ret));
 	statsEdit2_l->addWidget(weapon_E);
 
-	QGroupBox *status_E = new QGroupBox(tr("Statut"), ret);
+	QGroupBox *status_E = new QGroupBox(tr("Status"), ret);
 	QGridLayout *statusEdit_l = new QGridLayout(status_E);
 
 	QStringList status;
-	status << tr("Mort") << tr("Poison") << tr("Fossile") << tr("Darkness") << tr("Aphasie") << tr("Trouble") << tr("Zombie");
+	status << tr("KO") << tr("Poison") << tr("Petrify") << tr("Darkness") << tr("Silence") << tr("Berserk") << tr("Zombie");
 	QCheckBox *status_checkBox;
 	for (int i = 0; i < 7; ++i)
 	{
@@ -191,27 +191,27 @@ QWidget *PersoEditor::buildPage1()
 	status_checkBox = new QCheckBox(tr("???"), status_E);
 	status_list_E.append(status_checkBox);
 	statusEdit_l->addWidget(status_checkBox, 1, 3);
-	
-	unknownE = new QGroupBox(tr("Inconnu"), ret);
+
+	unknownE = new QGroupBox(tr("Unknown"), ret);
 	unknown2E = new SpinBox8(unknownE);
 	unknown3E = new SpinBox8(unknownE);
 	unknown4E = new SpinBox8(unknownE);
 	unknown5E = new SpinBox8(unknownE);
 	unknown6E = new QSpinBox(unknownE);
 	unknown6E->setRange(0, 31);
-	
+
 	QHBoxLayout *inconnuEdit_l = new QHBoxLayout(unknownE);
-	inconnuEdit_l->addWidget(new QLabel(tr("1 :"), unknownE));
+	inconnuEdit_l->addWidget(new QLabel(tr("1:"), unknownE));
 	inconnuEdit_l->addWidget(unknown2E);
-	inconnuEdit_l->addWidget(new QLabel(tr("2 :"), unknownE));
+	inconnuEdit_l->addWidget(new QLabel(tr("2:"), unknownE));
 	inconnuEdit_l->addWidget(unknown3E);
-	inconnuEdit_l->addWidget(new QLabel(tr("3 :"), unknownE));
+	inconnuEdit_l->addWidget(new QLabel(tr("3:"), unknownE));
 	inconnuEdit_l->addWidget(unknown4E);
-	inconnuEdit_l->addWidget(new QLabel(tr("4 :"), unknownE));
+	inconnuEdit_l->addWidget(new QLabel(tr("4:"), unknownE));
 	inconnuEdit_l->addWidget(unknown5E);
-	inconnuEdit_l->addWidget(new QLabel(tr("5 :"), unknownE));
+	inconnuEdit_l->addWidget(new QLabel(tr("5:"), unknownE));
 	inconnuEdit_l->addWidget(unknown6E);
-	
+
 	bonus_E = new QGroupBox(tr("Bonus"), ret);
 	HPs_E = new SpinBox16(bonus_E);
 	vgr_E = new SpinBox8(bonus_E);
@@ -223,33 +223,33 @@ QWidget *PersoEditor::buildPage1()
 	QPushButton *bonusAllButton = new QPushButton(tr("Max"), bonus_E);
 
 	QGridLayout *bonusEdit_l = new QGridLayout(bonus_E);
-	bonusEdit_l->addWidget(new QLabel(tr("Bonus HP :"), bonus_E), 0, 0);
+	bonusEdit_l->addWidget(new QLabel(tr("HP bonus:"), bonus_E), 0, 0);
 	bonusEdit_l->addWidget(HPs_E, 0, 1);
-	bonusEdit_l->addWidget(new QLabel(tr("Bonus vgr :"), bonus_E), 0, 2);
+	bonusEdit_l->addWidget(new QLabel(tr("Str Bonus:"), bonus_E), 0, 2);
 	bonusEdit_l->addWidget(vgr_E, 0, 3);
-	bonusEdit_l->addWidget(new QLabel(tr("Bonus dfs :"), bonus_E), 0, 4);
+	bonusEdit_l->addWidget(new QLabel(tr("Vit Bonus:"), bonus_E), 0, 4);
 	bonusEdit_l->addWidget(dfs_E, 0, 5);
-	bonusEdit_l->addWidget(new QLabel(tr("Bonus mgi :"), bonus_E), 0, 6);
+	bonusEdit_l->addWidget(new QLabel(tr("Mag Bonus:"), bonus_E), 0, 6);
 	bonusEdit_l->addWidget(mgi_E, 0, 7);
-	bonusEdit_l->addWidget(new QLabel(tr("Bonus psy :"), bonus_E), 1, 0);
+	bonusEdit_l->addWidget(new QLabel(tr("Spr Bonus:"), bonus_E), 1, 0);
 	bonusEdit_l->addWidget(psy_E, 1, 1);
-	bonusEdit_l->addWidget(new QLabel(tr("Bonus vts :"), bonus_E), 1, 2);
+	bonusEdit_l->addWidget(new QLabel(tr("Spd Bonus:"), bonus_E), 1, 2);
 	bonusEdit_l->addWidget(vts_E, 1, 3);
-	bonusEdit_l->addWidget(new QLabel(tr("Bonus chc :"), bonus_E), 1, 4);
+	bonusEdit_l->addWidget(new QLabel(tr("Luck Bonus:"), bonus_E), 1, 4);
 	bonusEdit_l->addWidget(chc_E, 1, 5);
 	bonusEdit_l->addWidget(bonusAllButton, 1, 7);
 
 	connect(bonusAllButton, SIGNAL(released()), SLOT(bonusMaxAll()));
 
-	alternativeE = new QCheckBox(tr("Costume alternatif (Seed, galbadien)"), ret);
-	lock1E = new QCheckBox(tr("Vérouillé 1 (menu 'remplacer')"), ret);
-	lock2E = new QCheckBox(tr("Vérouillé 2 (menu 'remplacer')"), ret);
+	alternativeE = new QCheckBox(tr("Alternative model (SeeD, galbadian)"), ret);
+	lock1E = new QCheckBox(tr("Locked 1 ('switch' menu)"), ret);
+	lock2E = new QCheckBox(tr("Locked 2 ('switch' menu)"), ret);
 
 	QHBoxLayout *alternativeL = new QHBoxLayout();
 	alternativeL->addWidget(alternativeE);
 	alternativeL->addWidget(lock1E);
 	alternativeL->addWidget(lock2E);
-	
+
 	QVBoxLayout *layout = new QVBoxLayout(ret);
 	layout->addLayout(mainEdit_l);
 	layout->addLayout(mainEdit2_l);
@@ -260,7 +260,7 @@ QWidget *PersoEditor::buildPage1()
 	layout->addWidget(unknownE);
 	layout->addLayout(alternativeL);
 	layout->addStretch();
-	
+
 	return ret;
 }
 
@@ -281,18 +281,18 @@ QWidget *PersoEditor::buildPage2()
 		curLabel->setTextInteractionFlags(Qt::NoTextInteraction);
 		connect(curSpinBox, SIGNAL(valueChanged(int)), SLOT(updateCompLabels()));
 	}
-	possAll_E = new QCheckBox(tr("Sélectionner tout"), ret);
+	possAll_E = new QCheckBox(tr("Select all"), ret);
 	compAll_E = new QSpinBox(ret);
 	compAll_E->setRange(-59535, 6000);
 	compLabelAll_E = new QLabel(ret);
-	QPushButton *apply = new QPushButton(tr("Appliquer"), ret);
+	QPushButton *apply = new QPushButton(tr("Apply"), ret);
 	connect(possAll_E, SIGNAL(toggled(bool)), SLOT(selectAllGFs(bool)));
 	connect(compAll_E, SIGNAL(valueChanged(int)), SLOT(updateCompAllLabel()));
 	connect(apply, SIGNAL(clicked()), SLOT(updateAllCompatibilities()));
 
 	QGridLayout *grid = new QGridLayout(ret);
-	grid->addWidget(new QLabel(tr("Compatibilité"), ret), 0, 1, Qt::AlignRight);
-	grid->addWidget(new QLabel(tr("Compatibilité"), ret), 0, 4, Qt::AlignRight);
+	grid->addWidget(new QLabel(tr("Compatibility"), ret), 0, 1, Qt::AlignRight);
+	grid->addWidget(new QLabel(tr("Compatibility"), ret), 0, 4, Qt::AlignRight);
 	for (int i = 0; i < 8; ++i) {
 		for (int j = 0; j < 2; j++) {
 			grid->addWidget(poss_E.at(i), i+1, 0);
@@ -319,9 +319,9 @@ QWidget *PersoEditor::buildPage3()
 
 	QFont font;
 	font.setPointSize(10);
-	
+
 	magie_E_model = new QStandardItemModel(ret);
-	magie_E_model->setHorizontalHeaderLabels(QStringList() << tr("Nom") << tr("Qté"));
+	magie_E_model->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Qty"));
 	magie_E_view = new QTreeView(ret);
 	magie_E_view->setModel(magie_E_model);
 	magie_E_view->setEditTriggers(QAbstractItemView::DoubleClicked);
@@ -349,11 +349,11 @@ QWidget *PersoEditor::buildPage3()
 	magie_E_view->header()->setSectionResizeMode(0, QHeaderView::Stretch);
 
 	font.setPixelSize(10);
-	QPushButton *delAll = new QPushButton(tr("Supprimer tout"), ret);
+	QPushButton *delAll = new QPushButton(tr("Remove All"), ret);
 	delAll->setFont(font);
 
 	QWidget *qtyAll = new QWidget(ret);
-	QPushButton *qtyAllOK = new QPushButton(tr("Tout"), qtyAll);
+	QPushButton *qtyAllOK = new QPushButton(tr("All"), qtyAll);
 	qtyAllOK->setFont(font);
 	qtyAllSpin = new SpinBox8(qtyAll);
 	QHBoxLayout *qtyLayout = new QHBoxLayout(qtyAll);
@@ -368,38 +368,38 @@ QWidget *PersoEditor::buildPage3()
 	layout->addWidget(magie_E_view, 0, 0, 1, 2);
 	layout->addWidget(delAll, 1, 0, Qt::AlignLeft);
 	layout->addWidget(qtyAll, 1, 1, Qt::AlignRight);
-	
+
 	return ret;
 }
 
 QWidget *PersoEditor::buildPage4()
 {
 	QWidget *ret = new QWidget(this);
-	
+
 	QMap<int, QIcon> icons = abilityIcons();
 
-	QGroupBox *commande_E = new QGroupBox(tr("Commandes"), ret);
+	QGroupBox *commande_E = new QGroupBox(tr("Command"), ret);
 	commande1_E = new QComboBox(commande_E);
 	commande1_E->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	commande2_E = new QComboBox(commande_E);
 	commande2_E->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	commande3_E = new QComboBox(commande_E);
 	commande3_E->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
-	unknown1LabelE = new QLabel(tr("Inconnu (commande 4) :"), commande_E);
+	unknown1LabelE = new QLabel(tr("Unknown (command 4):"), commande_E);
 	unknown1E = new SpinBox8(commande_E);
-	
+
 	QGridLayout *commande_L = new QGridLayout(commande_E);
-	commande_L->addWidget(new QLabel(tr("Commande 1 :"), commande_E), 0, 0);
+	commande_L->addWidget(new QLabel(tr("Command 1:"), commande_E), 0, 0);
 	commande_L->addWidget(commande1_E, 0, 1);
-	commande_L->addWidget(new QLabel(tr("Commande 2 :"), commande_E), 1, 0);
+	commande_L->addWidget(new QLabel(tr("Command 2:"), commande_E), 1, 0);
 	commande_L->addWidget(commande2_E, 1, 1);
-	commande_L->addWidget(new QLabel(tr("Commande 3 :"), commande_E), 2, 0);
+	commande_L->addWidget(new QLabel(tr("Command 3:"), commande_E), 2, 0);
 	commande_L->addWidget(commande3_E, 2, 1);
 	commande_L->addWidget(unknown1LabelE, 3, 0);
 	commande_L->addWidget(unknown1E, 3, 1);
 	commande_L->setRowStretch(4, 1);
-	
-	QGroupBox *ability_E = new QGroupBox(tr("Capacités"), ret);
+
+	QGroupBox *ability_E = new QGroupBox(tr("Abilities"), ret);
 	ability1_E = new QComboBox(ability_E);
 	ability1_E->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ability2_E = new QComboBox(ability_E);
@@ -408,22 +408,22 @@ QWidget *PersoEditor::buildPage4()
 	ability3_E->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ability4_E = new QComboBox(ability_E);
 	ability4_E->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
-	
+
 	QGridLayout *ability_L = new QGridLayout(ability_E);
-	ability_L->addWidget(new QLabel(tr("Capacité 1 :"), ability_E), 0, 0);
+	ability_L->addWidget(new QLabel(tr("Ability 1:"), ability_E), 0, 0);
 	ability_L->addWidget(ability1_E, 0, 1);
-	ability_L->addWidget(new QLabel(tr("Capacité 2 :"), ability_E), 1, 0);
+	ability_L->addWidget(new QLabel(tr("Ability 2:"), ability_E), 1, 0);
 	ability_L->addWidget(ability2_E, 1, 1);
-	ability_L->addWidget(new QLabel(tr("Capacité 3 :"), ability_E), 2, 0);
+	ability_L->addWidget(new QLabel(tr("Ability 3:"), ability_E), 2, 0);
 	ability_L->addWidget(ability3_E, 2, 1);
-	ability_L->addWidget(new QLabel(tr("Capacité 4 :"), ability_E), 3, 0);
+	ability_L->addWidget(new QLabel(tr("Ability 4:"), ability_E), 3, 0);
 	ability_L->addWidget(ability4_E, 3, 1);
 	ability_L->setRowStretch(4, 1);
-	
+
 	QHBoxLayout *layout = new QHBoxLayout(ret);
 	layout->addWidget(commande_E);
 	layout->addWidget(ability_E);
-	
+
 	return ret;
 }
 
@@ -431,7 +431,7 @@ QWidget *PersoEditor::buildPage5()
 {
 	QWidget *ret = new QWidget(this);
 	QComboBox *comboBox;
-	QGroupBox *apt_E = new QGroupBox(tr("Aptitudes"), ret);
+	QGroupBox *apt_E = new QGroupBox(tr("Ability"), ret);
 	for (int i = 0; i < 9; ++i)
 	{
 		aptitude_E.append(comboBox = new QComboBox(apt_E));
@@ -440,27 +440,27 @@ QWidget *PersoEditor::buildPage5()
 			comboBox->addItem(mag, j++);
 	}
 	QGridLayout *apt_L = new QGridLayout(apt_E);
-	apt_L->addWidget(new QLabel(tr("HP :"), apt_E), 0, 0);
+	apt_L->addWidget(new QLabel(tr("HP:"), apt_E), 0, 0);
 	apt_L->addWidget(aptitude_E[0], 0, 1);
-	apt_L->addWidget(new QLabel(tr("Vigueur :"), apt_E), 1, 0);
+	apt_L->addWidget(new QLabel(tr("Strength:"), apt_E), 1, 0);
 	apt_L->addWidget(aptitude_E[1], 1, 1);
-	apt_L->addWidget(new QLabel(tr("Défense :"), apt_E), 2, 0);
+	apt_L->addWidget(new QLabel(tr("Vitality:"), apt_E), 2, 0);
 	apt_L->addWidget(aptitude_E[2], 2, 1);
-	apt_L->addWidget(new QLabel(tr("Magie :"), apt_E), 3, 0);
+	apt_L->addWidget(new QLabel(tr("Magic:"), apt_E), 3, 0);
 	apt_L->addWidget(aptitude_E[3], 3, 1);
-	apt_L->addWidget(new QLabel(tr("Psychisme :"), apt_E), 4, 0);
+	apt_L->addWidget(new QLabel(tr("Spirit:"), apt_E), 4, 0);
 	apt_L->addWidget(aptitude_E[4], 4, 1);
-	
-	apt_L->addWidget(new QLabel(tr("Vitesse :"), apt_E), 1, 2);
+
+	apt_L->addWidget(new QLabel(tr("Speed:"), apt_E), 1, 2);
 	apt_L->addWidget(aptitude_E[5], 1, 3);
-	apt_L->addWidget(new QLabel(tr("Esquive :"), apt_E), 2, 2);
+	apt_L->addWidget(new QLabel(tr("Evade:"), apt_E), 2, 2);
 	apt_L->addWidget(aptitude_E[6], 2, 3);
-	apt_L->addWidget(new QLabel(tr("Précision :"), apt_E), 3, 2);
+	apt_L->addWidget(new QLabel(tr("Hit%:"), apt_E), 3, 2);
 	apt_L->addWidget(aptitude_E[7], 3, 3);
-	apt_L->addWidget(new QLabel(tr("Chance :"), apt_E), 4, 2);
+	apt_L->addWidget(new QLabel(tr("Luck:"), apt_E), 4, 2);
 	apt_L->addWidget(aptitude_E[8], 4, 3);
-	
-	QGroupBox *ele_E = new QGroupBox(tr("Élémental"), ret);
+
+	QGroupBox *ele_E = new QGroupBox(tr("Elemental"), ret);
 	for (int i = 0; i < 5; ++i)
 	{
 		element_E.append(comboBox = new QComboBox(ele_E));
@@ -469,18 +469,18 @@ QWidget *PersoEditor::buildPage5()
 			comboBox->addItem(mag, j++);
 	}
 	QGridLayout *ele_L = new QGridLayout(ele_E);
-	ele_L->addWidget(new QLabel(tr("Attaque :"), ele_E), 0, 0);
+	ele_L->addWidget(new QLabel(tr("Attack:"), ele_E), 0, 0);
 	ele_L->addWidget(element_E[0], 0, 1);
-	ele_L->addWidget(new QLabel(tr("Défense 1 :"), ele_E), 1, 0);
+	ele_L->addWidget(new QLabel(tr("Defense 1:"), ele_E), 1, 0);
 	ele_L->addWidget(element_E[1], 1, 1);
-	ele_L->addWidget(new QLabel(tr("Défense 2 :"), ele_E), 2, 0);
+	ele_L->addWidget(new QLabel(tr("Defense 2:"), ele_E), 2, 0);
 	ele_L->addWidget(element_E[2], 2, 1);
-	ele_L->addWidget(new QLabel(tr("Défense 3 :"), ele_E), 3, 0);
+	ele_L->addWidget(new QLabel(tr("Defense 3:"), ele_E), 3, 0);
 	ele_L->addWidget(element_E[3], 3, 1);
-	ele_L->addWidget(new QLabel(tr("Défense 4 :"), ele_E), 4, 0);
+	ele_L->addWidget(new QLabel(tr("Defense 4:"), ele_E), 4, 0);
 	ele_L->addWidget(element_E[4], 4, 1);
-	
-	QGroupBox *mtl_E = new QGroupBox(tr("Mental"), ret);
+
+	QGroupBox *mtl_E = new QGroupBox(tr("Status"), ret);
 	for (int i = 0; i < 5; ++i)
 	{
 		mental_E.append(comboBox = new QComboBox(mtl_E));
@@ -489,23 +489,23 @@ QWidget *PersoEditor::buildPage5()
 			comboBox->addItem(mag, j++);
 	}
 	QGridLayout *mtl_L = new QGridLayout(mtl_E);
-	mtl_L->addWidget(new QLabel(tr("Attaque :"), mtl_E), 0, 0);
+	mtl_L->addWidget(new QLabel(tr("Attack:"), mtl_E), 0, 0);
 	mtl_L->addWidget(mental_E[0], 0, 1);
-	mtl_L->addWidget(new QLabel(tr("Défense 1 :"), mtl_E), 1, 0);
+	mtl_L->addWidget(new QLabel(tr("Defense 1:"), mtl_E), 1, 0);
 	mtl_L->addWidget(mental_E[1], 1, 1);
-	mtl_L->addWidget(new QLabel(tr("Défense 2 :"), mtl_E), 2, 0);
+	mtl_L->addWidget(new QLabel(tr("Defense 2:"), mtl_E), 2, 0);
 	mtl_L->addWidget(mental_E[2], 2, 1);
-	mtl_L->addWidget(new QLabel(tr("Défense 3 :"), mtl_E), 3, 0);
+	mtl_L->addWidget(new QLabel(tr("Defense 3:"), mtl_E), 3, 0);
 	mtl_L->addWidget(mental_E[3], 3, 1);
-	mtl_L->addWidget(new QLabel(tr("Défense 4 :"), mtl_E), 4, 0);
+	mtl_L->addWidget(new QLabel(tr("Defense 4:"), mtl_E), 4, 0);
 	mtl_L->addWidget(mental_E[4], 4, 1);
-	
+
 	QGridLayout *grid = new QGridLayout(ret);
 	grid->addWidget(apt_E, 0, 0, 1, 2);
 	grid->addWidget(ele_E, 1, 0);
 	grid->addWidget(mtl_E, 1, 1);
 	grid->setRowStretch(2, 1);
-	
+
 	return ret;
 }
 
@@ -514,7 +514,7 @@ void PersoEditor::buildPage6()
 	for (QObject *child : lbWidget->children())	delete child;
 	//Cette fonction varie en fonction du personnage, elle est appelée lors du remplissage et pas lors de l'initialisation
 	QGridLayout *grid = new QGridLayout(lbWidget);
-	
+
 	int cur=0;
 	LB_E.clear();
 	linoaLB_E.clear();
@@ -525,9 +525,9 @@ void PersoEditor::buildPage6()
 	switch (id)
 	{
 	case SQUALL:
-		LB_E << new QCheckBox(tr("Gunblade auto"), lbWidget);
+		LB_E << new QCheckBox(tr("Gunblade Auto"), lbWidget);
 		LB_E.first()->setChecked(data->misc2.renzokuken_auto & 1);
-		LB_E << new QCheckBox(tr("Indicateur renzokuken"), lbWidget);
+		LB_E << new QCheckBox(tr("Renzokuken Indicator"), lbWidget);
 		LB_E.at(1)->setChecked(data->misc2.renzokuken_indicator < 128);
 		LB_E.at(1)->setEnabled((data->misc2.renzokuken_auto & 1) == 0);
 		LBindicator_E = new QSlider(Qt::Horizontal, lbWidget);
@@ -546,7 +546,7 @@ void PersoEditor::buildPage6()
 		grid->setColumnStretch(3, 1);
 		return;
 	case ZELL:
-		LB_E << new QCheckBox(tr("Ring Master auto"), lbWidget);
+		LB_E << new QCheckBox(tr("Duel auto"), lbWidget);
 		LB_E.first()->setChecked((data->misc2.renzokuken_auto >> 1) & 1);
 		grid->addWidget(LB_E.first(), 0, 0);
 		cur++;
@@ -590,18 +590,18 @@ void PersoEditor::buildPage6()
 		return;
 	case RINOA:
 		angel_E = new QLineEdit(saveData->perso(ANGELO), lbWidget);
-		angel_disabledE = new QCheckBox(tr("Angel désactivé"), lbWidget);
+		angel_disabledE = new QCheckBox(tr("Angel disabled"), lbWidget);
 		angel_disabledE->setChecked((data->misc2.dream >> 4) & 1);
-		a_wing_enabledE = new QCheckBox(tr("Canonisation activé"), lbWidget);
+		a_wing_enabledE = new QCheckBox(tr("Angelo Wing enabled"), lbWidget);
 		a_wing_enabledE->setChecked((data->misc2.dream >> 5) & 1);
 		angeloPix = new QLabel(lbWidget);
 		angeloPix->setPixmap(QPixmap(":/images/icons/perso15.png"));
 
-		info = new HelpWidget(32, tr("<b>Case cochée :</b> limit break appris<br/><b>Case partiellement cochée :</b>"
-									 " limit break connu<br/><b>Valeur :</b> nombre de points restants pour apprendre "
-									 "le limit break"), lbWidget);
+		info = new HelpWidget(32, tr("<b>Checked:</b> learned limit break<br/><b>Partially checked:</b>"
+									 " known limit break<br/><b>Value:</b> number of points remaining to learn the limit break"),
+									 lbWidget);
 
-		grid->addWidget(new QLabel(Data::names().at(ANGELO)+tr(" :"), lbWidget), 0, 0);
+		grid->addWidget(new QLabel(Data::names().at(ANGELO)+tr(":"), lbWidget), 0, 0);
 		grid->addWidget(angel_E, 0, 1, 1, 6);
 		grid->addWidget(info, 1, 0, 1, 7);
 		grid->addWidget(angeloPix, 0, 7, 3, 1, Qt::AlignRight);
@@ -698,7 +698,7 @@ void PersoEditor::fillPage()
 		status_list_E.at(i)->setChecked((perso_data->status >> i) & 1);
 
 	/* PAGE 2 */
-	
+
 	for (int i = 0; i < 16; ++i)
 	{
 		poss_E[i]->setChecked((perso_data->gfs >> i) & 1);
@@ -706,7 +706,7 @@ void PersoEditor::fillPage()
 	}
 
 	/* PAGE 3 */
-	
+
 	for (int i = 0; i < 32; ++i)
 	{
 		quint8 magID = perso_data->magies[i] & 0xFF;

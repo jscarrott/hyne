@@ -35,7 +35,7 @@ SelectSavesDialog::SelectSavesDialog(const QList<SaveData *> &saveFiles, bool mu
 		list->setSelectionMode(QAbstractItemView::MultiSelection);
 	}
 	else {
-		msg->setText(tr("Sélectionnez une sauvegarde :"));
+		msg->setText(tr("Select one save:"));
 	}
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok,
@@ -58,7 +58,7 @@ SelectSavesDialog::SelectSavesDialog(const QList<SaveData *> &saveFiles, QWidget
 	msg = new HelpWidget(16, this);
 	fillList(saveFiles);
 
-	msg->setText(tr("Déplacez les éléments à la souris pour modifier l'ordre des saves."));
+	msg->setText(tr("Move items with your cursor to change the order of saves."));
 	list->setDragDropMode(QAbstractItemView::InternalMove);
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok,
@@ -83,7 +83,7 @@ void SelectSavesDialog::fillList(const QList<SaveData *> &saveFiles)
 		shortDescription = save->shortDescription();
 		QListWidgetItem *item = new QListWidgetItem(tr("Save %1 (%2)").arg(i+1)
 		                                            .arg(shortDescription.isEmpty()
-		                                                 ? tr("vide")
+		                                                 ? tr("empty")
 		                                                 : shortDescription));
 		item->setIcon(save->saveIcon().icon());
 		list->addItem(item);
@@ -93,7 +93,7 @@ void SelectSavesDialog::fillList(const QList<SaveData *> &saveFiles)
 
 QString SelectSavesDialog::infoText(bool warn)
 {
-	return tr("Sélectionnez jusqu'à <font color=\"%1\">15 saves</font> :")
+	return tr("Select up to <font color=\"%1\">15 saves</font>:")
 	        .arg(warn ? "red" : "");
 }
 

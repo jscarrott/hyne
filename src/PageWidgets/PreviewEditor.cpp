@@ -85,28 +85,28 @@ void PreviewEditor::buildWidget()
 	partyL->setContentsMargins(QMargins());
 
 	QGridLayout *autoL = new QGridLayout(autoGroup);
-	autoL->addWidget(new QLabel(tr("HP leader (inutilisé)"), autoGroup), 0, 0);
+	autoL->addWidget(new QLabel(tr("HP leader (unused)"), autoGroup), 0, 0);
 	autoL->addWidget(hpLeaderE, 0, 1);
-	autoL->addWidget(new QLabel(tr("HP max. leader (inutilisé)"), autoGroup), 0, 2);
+	autoL->addWidget(new QLabel(tr("HP max leader (unused)"), autoGroup), 0, 2);
 	autoL->addWidget(hpMaxLeaderE, 0, 3);
-	autoL->addWidget(new QLabel(tr("Niveau leader"), autoGroup), 0, 4);
+	autoL->addWidget(new QLabel(tr("Level leader"), autoGroup), 0, 4);
 	autoL->addWidget(nivLeaderE, 0, 5);
-	autoL->addWidget(new QLabel(tr("Argent"), autoGroup), 1, 0);
+	autoL->addWidget(new QLabel(tr("Gil"), autoGroup), 1, 0);
 	autoL->addWidget(gilsE, 1, 1);
-	autoL->addWidget(new QLabel(tr("Temps"), autoGroup), 1, 2);
+	autoL->addWidget(new QLabel(tr("Time"), autoGroup), 1, 2);
 	autoL->addWidget(timeE, 1, 3);
-	autoL->addWidget(new QLabel(tr("Disque"), autoGroup), 1, 4);
+	autoL->addWidget(new QLabel(tr("Disc"), autoGroup), 1, 4);
 	autoL->addWidget(discE, 1, 5);
-	autoL->addWidget(new QLabel(tr("Équipe"), autoGroup), 2, 0);
+	autoL->addWidget(new QLabel(tr("Party"), autoGroup), 2, 0);
 	autoL->addLayout(partyL, 2, 1, 1, 5);
 
 	QGridLayout *layout = new QGridLayout(this);
 	layout->addWidget(previewWidget, 0, 0, 1, 6, Qt::AlignCenter);
-	layout->addWidget(new QLabel(tr("Lieu affiché")), 1, 0);
+	layout->addWidget(new QLabel(tr("Displayed location")), 1, 0);
 	layout->addWidget(locationIDE, 1, 1);
-	layout->addWidget(new QLabel(tr("Nombre de sauvegardes")), 1, 2);
+	layout->addWidget(new QLabel(tr("Save count")), 1, 2);
 	layout->addWidget(saveCountE, 1, 3);
-	layout->addWidget(new QLabel(tr("Sauvegarde courante")), 1, 4);
+	layout->addWidget(new QLabel(tr("Current save")), 1, 4);
 	layout->addWidget(curSaveE, 1, 5);
 	layout->addWidget(autoGroup, 2, 0, 1, 6);
 	layout->setRowStretch(3, 1);

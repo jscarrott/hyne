@@ -30,8 +30,8 @@ void ConfigEditor::updateMode(bool mode)
 
 void ConfigEditor::buildWidget()
 {
-	QGroupBox *sonGroupE = new QGroupBox(tr("Son"), this);
-	son1E = new QRadioButton(tr("Stéréo"), sonGroupE);
+	QGroupBox *sonGroupE = new QGroupBox(tr("Sound"), this);
+	son1E = new QRadioButton(tr("Stereo"), sonGroupE);
 	son2E = new QRadioButton(tr("Mono"), sonGroupE);
 	
 	QHBoxLayout *sonL = new QHBoxLayout(sonGroupE);
@@ -39,11 +39,11 @@ void ConfigEditor::buildWidget()
 	sonL->addWidget(son2E);
 	sonL->addStretch();
 	
-	manetteGroupE = new QGroupBox(tr("Touches personnalisées"), this);
+	manetteGroupE = new QGroupBox(tr("Custom keys"), this);
 	manetteGroupE->setCheckable(true);
 	QStringList keyNames;
-	keyNames << tr("???") << tr("Fuite") << tr("Fuite/Changer vision") << tr("Écran cible") << tr("Gâchette")
-			<< tr("Marcher/Annuler") << tr("Menu") << tr("Parler/Confirmer") << tr("Parler/Jeu de cartes")
+	keyNames << tr("???") << tr("Escape") << tr("Escape/Switch POV") << tr("Change Select Window") << tr("Trigger")
+			<< tr("Move/Cancel") << tr("Menu") << tr("Talk/Confirm") << tr("Talk/Triple Triad")
 			<< tr("Select") << tr("???") << tr("???");
 	
 	QGridLayout *keysL = new QGridLayout(manetteGroupE);
@@ -59,29 +59,29 @@ void ConfigEditor::buildWidget()
 	}
 	curSpinBox = new SpinBox8(manetteGroupE);
 	keysE.append(curSpinBox);
-	keysL->addWidget(new QLabel(tr("Pause"), manetteGroupE), 3, 0);
+	keysL->addWidget(new QLabel(tr("Start"), manetteGroupE), 3, 0);
 	keysL->addWidget(curSpinBox, 3, 1);
 	
-	QPushButton *joystickE = new QPushButton(tr("Inverser"), manetteGroupE);
+	QPushButton *joystickE = new QPushButton(tr("Invert"), manetteGroupE);
 	joystickLbl = new QLabel(manetteGroupE);
 	keysL->addWidget(joystickLbl, 4, 0, 1, 4);
 	keysL->addWidget(joystickE, 4, 4);
 
-	QPushButton *defaultButton = new QPushButton(tr("Par défaut"), manetteGroupE);
+	QPushButton *defaultButton = new QPushButton(tr("Default"), manetteGroupE);
 	keysL->addWidget(defaultButton, 4, 6, 1, 2);
 	
-	QGroupBox *pointeurGroupE = new QGroupBox(tr("Pointeur"), this);
+	QGroupBox *pointeurGroupE = new QGroupBox(tr("Cursor"), this);
 	pointeur1E = new QRadioButton(tr("Initial"), pointeurGroupE);
-	pointeur2E = new QRadioButton(tr("Mémoire"), pointeurGroupE);
+	pointeur2E = new QRadioButton(tr("Memory"), pointeurGroupE);
 	
 	QHBoxLayout *pointeurL = new QHBoxLayout(pointeurGroupE);
 	pointeurL->addWidget(pointeur1E);
 	pointeurL->addWidget(pointeur2E);
 	pointeurL->addStretch();
 	
-	QGroupBox *ATBGroupE = new QGroupBox(tr("Jauge ATB"), this);
+	QGroupBox *ATBGroupE = new QGroupBox(tr("ATB"), this);
 	ATB1E = new QRadioButton(tr("Active"), pointeurGroupE);
-	ATB2E = new QRadioButton(tr("Attente"), pointeurGroupE);
+	ATB2E = new QRadioButton(tr("Wait"), pointeurGroupE);
 	
 	QHBoxLayout *ATBL = new QHBoxLayout(ATBGroupE);
 	ATBL->addWidget(ATB1E);
@@ -89,17 +89,17 @@ void ConfigEditor::buildWidget()
 	ATBL->addStretch();
 	
 	QGroupBox *scanGroupE = new QGroupBox(tr("Scan"), this);
-	scan1E = new QRadioButton(tr("1 fois"), scanGroupE);
-	scan2E = new QRadioButton(tr("Toujours"), scanGroupE);
+	scan1E = new QRadioButton(tr("Once"), scanGroupE);
+	scan2E = new QRadioButton(tr("Always"), scanGroupE);
 	
 	QHBoxLayout *scanL = new QHBoxLayout(scanGroupE);
 	scanL->addWidget(scan1E);
 	scanL->addWidget(scan2E);
 	scanL->addStretch();
 
-	QGroupBox *targetMenuGroupE = new QGroupBox(tr("Menu cible (combats)"), this);
-	targetMenu1E = new QRadioButton(tr("Non"), targetMenuGroupE);
-	targetMenu2E = new QRadioButton(tr("Oui"), targetMenuGroupE);
+	QGroupBox *targetMenuGroupE = new QGroupBox(tr("Target Menu (battle)"), this);
+	targetMenu1E = new QRadioButton(tr("No"), targetMenuGroupE);
+	targetMenu2E = new QRadioButton(tr("Yes"), targetMenuGroupE);
 
 	QHBoxLayout *targetMenuL = new QHBoxLayout(targetMenuGroupE);
 	targetMenuL->addWidget(targetMenu1E);
@@ -130,7 +130,7 @@ void ConfigEditor::buildWidget()
 	vibrationL->addWidget(vibration2E);
 	vibrationL->addStretch();
 	
-	inconnu1E = new QCheckBox(tr("Inconnu 1"), this);
+	inconnu1E = new QCheckBox(tr("Unknown 1"), this);
 	
 	QHBoxLayout *inconnuL = new QHBoxLayout;
 	inconnuL->addWidget(inconnu1E);
@@ -144,15 +144,15 @@ void ConfigEditor::buildWidget()
 	grid->addWidget(targetMenuGroupE, 1, 2, 1, 2);
 	grid->addWidget(vibrationGroupE, 1, 4, 1, 2);
 	grid->addLayout(inconnuL, 2, 0, 1, 6);
-	grid->addWidget(new QLabel(tr("Déplacement caméra :"), this), 3, 0, 1, 2);
+	grid->addWidget(new QLabel(tr("Camera Movement:"), this), 3, 0, 1, 2);
 	grid->addWidget(cameraE, 3, 2, 1, 4);
-	grid->addWidget(new QLabel(tr("Vitesse combat :"), this), 4, 0, 1, 2);
+	grid->addWidget(new QLabel(tr("Battle speed:"), this), 4, 0, 1, 2);
 	grid->addWidget(vts_combatE, 4, 2, 1, 4);
-	grid->addWidget(new QLabel(tr("Message combat :"), this), 5, 0, 1, 2);
+	grid->addWidget(new QLabel(tr("Battle message:"), this), 5, 0, 1, 2);
 	grid->addWidget(vts_msg_combatE, 5, 2, 1, 4);
-	grid->addWidget(new QLabel(tr("Message excursion :"), this), 6, 0, 1, 2);
+	grid->addWidget(new QLabel(tr("Field message:"), this), 6, 0, 1, 2);
 	grid->addWidget(vts_msgE, 6, 2, 1, 4);
-	grid->addWidget(new QLabel(tr("Entrée Analogique/Volume :"), this), 7, 0, 1, 2);
+	grid->addWidget(new QLabel(tr("Analog Input/Volume:"), this), 7, 0, 1, 2);
 	grid->addWidget(analog_volumeE, 7, 2, 1, 4);
 	grid->addWidget(manetteGroupE, 8, 0, 1, 6);
 	grid->setRowStretch(9, 1);
@@ -247,7 +247,7 @@ void ConfigEditor::savePage()
 
 void ConfigEditor::setJoystickLbl()
 {
-	joystickLbl->setText(((data->config.divers >> 7) & 1) ? tr("Joystick gauche : Véhicule avt/arr | Joystick droit : marcher") : tr("Joystick gauche : marcher | Joystick droit : Véhicule avt/arr"));
+	joystickLbl->setText(((data->config.divers >> 7) & 1) ? tr("Left joystick: car FWD/BACK | Right joystick: walk") : tr("Left joystick: walk | Right joystick: car FWD/BACK"));
 }
 
 void ConfigEditor::joystickS()

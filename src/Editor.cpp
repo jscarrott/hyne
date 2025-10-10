@@ -56,7 +56,7 @@ Editor::Editor(QWidget *parent) :
 		apply->setStyle(style);
 
 
-	QPushButton *cancel = new QPushButton(tr("&Annuler"), this);
+	QPushButton *cancel = new QPushButton(tr("&Cancel"), this);
 	
 	// Set default icon if needed
 	if (style->styleHint(QStyle::SH_DialogButtonBox_ButtonsHaveIcons))

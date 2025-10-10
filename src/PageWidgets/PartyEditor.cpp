@@ -26,10 +26,10 @@ PartyEditor::PartyEditor(QWidget *parent)
 
 void PartyEditor::buildWidget()
 {
-	QGroupBox *partyGBE = new QGroupBox(tr("Équipe"), this);
+	QGroupBox *partyGBE = new QGroupBox(tr("Party"), this);
 	QGridLayout *partyGBL = new QGridLayout(partyGBE);
-	partyGBL->addWidget(new QLabel(tr("Menus :")), 0, 0);
-	partyGBL->addWidget(new QLabel(tr("À l'écran :")), 1, 0);
+	partyGBL->addWidget(new QLabel(tr("Menus:")), 0, 0);
+	partyGBL->addWidget(new QLabel(tr("Field:")), 1, 0);
 	QList<QIcon> icons;
 	int i, j;
 	for (j = 0; j < 11; ++j) {
@@ -56,13 +56,13 @@ void PartyEditor::buildWidget()
 		partyGBL->addWidget(comboBox, 1, i+1);
 	}
 
-	dreamE = new QCheckBox(tr("Seule l'équipe principale est visible (rêve avec Laguna)"), partyGBE);
+	dreamE = new QCheckBox(tr("Party isolated (dream world)"), partyGBE);
 	partyGBL->addWidget(dreamE, 2, 0, 1, 4, Qt::AlignLeft);
 
 	QGroupBox *positionGBE = new QGroupBox(tr("Position"), this);
 
 	presetPosE = new QComboBox(positionGBE);
-	presetPosE->addItem(tr("Position prédéfinie"));
+	presetPosE->addItem(tr("Presets"));
 	for (i = 0; i < 21; ++i) {
 		Point p = Data::wmLocation[i];
 		presetPosE->addItem(Data::cities().at(p.city), quint32(p.x) | quint32(p.y) << 16);
@@ -73,14 +73,14 @@ void PartyEditor::buildWidget()
 
 	QGridLayout *positionGBL = new QGridLayout(positionGBE);
 	positionGBL->addWidget(presetPosE, 0, 0);
-	positionGBL->addWidget(new QLabel(tr("X :")), 0, 1);
-	positionGBL->addWidget(new QLabel(tr("Y :")), 0, 2);
-	positionGBL->addWidget(new QLabel(tr("Triangle ID :")), 0, 3);
-	positionGBL->addWidget(new QLabel(tr("Direction :")), 0, 4);
+	positionGBL->addWidget(new QLabel(tr("X:")), 0, 1);
+	positionGBL->addWidget(new QLabel(tr("Y:")), 0, 2);
+	positionGBL->addWidget(new QLabel(tr("Triangle ID:")), 0, 3);
+	positionGBL->addWidget(new QLabel(tr("Direction:")), 0, 4);
 
 	for (i = 0; i < 3; ++i) {
 		QSpinBox *spinBox;
-		positionGBL->addWidget(new QLabel(tr("Membre %1 :").arg(i+1)), i+1, 0);
+		positionGBL->addWidget(new QLabel(tr("Member %1:").arg(i+1)), i+1, 0);
 
 		xE.append(spinBox = new QSpinBox(positionGBE));
 		spinBox->setRange(-32768, 32767);
@@ -98,10 +98,10 @@ void PartyEditor::buildWidget()
 	}
 
 	moduleE = new QComboBox(positionGBE);
-	moduleE->addItem(tr("Terrain"), 0);
-	moduleE->addItem(tr("Terrain"), 1);
-	moduleE->addItem(tr("Mappemonde"), 2);
-	moduleE->addItem(tr("Combat"), 3);
+	moduleE->addItem(tr("Field"), 0);
+	moduleE->addItem(tr("Field"), 1);
+	moduleE->addItem(tr("Worldmap"), 2);
+	moduleE->addItem(tr("Battle"), 3);
 
 	connect(moduleE, SIGNAL(currentIndexChanged(int)), SLOT(setPosPresetsVisibilityFromModuleIndex(int)));
 
@@ -121,9 +121,9 @@ void PartyEditor::buildWidget()
 	}
 
 	positionGBL->addWidget(moduleE, 4, 0);
-	positionGBL->addWidget(new QLabel(tr("Terrain courant")), 4, 1, 1, 2);
+	positionGBL->addWidget(new QLabel(tr("Current field")), 4, 1, 1, 2);
 	positionGBL->addWidget(mapE, 4, 3, 1, 2);
-	positionGBL->addWidget(new QLabel(tr("Terrain précédent")), 5, 1, 1, 2);
+	positionGBL->addWidget(new QLabel(tr("Previous field")), 5, 1, 1, 2);
 	positionGBL->addWidget(lastMapE, 5, 3, 1, 2);
 
 	QVBoxLayout *layout = new QVBoxLayout(this);
@@ -151,21 +151,21 @@ void PartyEditor::fillPage()
 	if (index != -1) {
 		moduleE->setCurrentIndex(index);
 	} else {
-		moduleE->addItem(tr("Inconnu (%1)").arg(data->misc2.module), data->misc2.module);
+		moduleE->addItem(tr("Unknown (%1)").arg(data->misc2.module), data->misc2.module);
 	}
 
 	index = mapE->findData(data->misc2.location);
 	if (index != -1) {
 		mapE->setCurrentIndex(index);
 	} else {
-		mapE->addItem(tr("Inconnu (%1)").arg(data->misc2.location), data->misc2.location);
+		mapE->addItem(tr("Unknown (%1)").arg(data->misc2.location), data->misc2.location);
 	}
 
 	index = lastMapE->findData(data->misc2.location_last);
 	if (index != -1) {
 		lastMapE->setCurrentIndex(index);
 	} else {
-		lastMapE->addItem(tr("Inconnu (%1)").arg(data->misc2.location_last), data->misc2.location_last);
+		lastMapE->addItem(tr("Unknown (%1)").arg(data->misc2.location_last), data->misc2.location_last);
 	}
 }
 

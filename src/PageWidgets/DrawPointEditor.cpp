@@ -29,7 +29,7 @@ void DrawPointEditor::buildWidget()
 	font.setPointSize(10);
 
 	drawE_model = new QStandardItemModel(this);
-	drawE_model->setHorizontalHeaderLabels(QStringList() << tr("Magie") << tr("Lieu") << tr("État actuel"));
+	drawE_model->setHorizontalHeaderLabels(QStringList() << tr("Magic") << tr("Location") << tr("Current State"));
 
 	QTreeView *drawE_list = new QTreeView(this);
 	drawE_list->setModel(drawE_model);
@@ -48,11 +48,11 @@ void DrawPointEditor::buildWidget()
 		item->setEditable(false);
 		items.append(item);
 
-		QString location = Data::drawPointsLoc[i] != -1 ? Data::locations().value(Data::drawPointsLoc[i]) : tr("Nulle part");
+		QString location = Data::drawPointsLoc[i] != -1 ? Data::locations().value(Data::drawPointsLoc[i]) : tr("Nowhere");
 		if (i >= 128) {
-			location.prepend(tr("Mappemonde - "));
+			location.prepend(tr("Worldmap - "));
 		} else {
-			location.prepend(tr("Terrain - "));
+			location.prepend(tr("Field - "));
 		}
 		item = new QStandardItem(location);
 		if (i == 12) { // Exception for "Cure", "escavation site - centra"
@@ -76,10 +76,10 @@ void DrawPointEditor::buildWidget()
 
 	listAll = new QComboBox(this);
 	listAll->setFont(font);
-	listAll->addItem(tr("Toutes pleines"));
-	listAll->addItem(tr("Toutes moitié pleines"));
-	listAll->addItem(tr("Toutes vides"));
-	listAll->addItem(tr("Toutes épuisées"));
+	listAll->addItem(tr("All filled"));
+	listAll->addItem(tr("All half-filled"));
+	listAll->addItem(tr("All empty"));
+	listAll->addItem(tr("All completely empty"));
 
 	QPushButton *okAll = new QPushButton(tr("OK"), this);
 	okAll->setFont(font);
@@ -101,7 +101,7 @@ void DrawPointEditor::buildWidget()
 void DrawPointEditor::fillPage()
 {
 	QStringList drawStates;
-	drawStates << tr("Pleine") << tr("Moitié pleine") << tr("Vide") << tr("Épuisée");
+	drawStates << tr("Filled") << tr("Half-filled") << tr("Empty") << tr("Completely empty");
 
 	for (int i = 0; i < 256; ++i)
 	{
@@ -142,7 +142,7 @@ void DrawPointEditor::all()
 {
 	int all = listAll->currentIndex();
 	QStringList drawStates;
-	drawStates << tr("Pleine") << tr("Moitié pleine") << tr("Vide") << tr("Épuisée");
+	drawStates << tr("Filled") << tr("Half-filled") << tr("Empty") << tr("Completely empty");
 	QString allText = drawStates.at(all);
 
 	for (int i = 0; i < 256; ++i) {

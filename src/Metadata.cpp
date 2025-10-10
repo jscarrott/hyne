@@ -56,12 +56,12 @@ bool Metadata::open()
 				if (type.compare("ff8", Qt::CaseInsensitive) == 0) {
 					num = attrs.value("num").toString().toUInt(&ok);
 					if (!ok) {
-						setErrorString(QObject::tr("Attribut 'num' invalide"));
+						setErrorString(QObject::tr("Invalid 'num' attribute"));
 						return false;
 					}
 					slot = attrs.value("slot").toString().toUInt(&ok);
 					if (!ok) {
-						setErrorString(QObject::tr("Attribut 'slot' invalide"));
+						setErrorString(QObject::tr("Invalid 'slot' attribute"));
 						return false;
 					}
 				}
@@ -156,7 +156,7 @@ bool Metadata::save()
 	xml.writeEndDocument();
 
 	if (xml.hasError()) {
-		setErrorString(QObject::tr("Erreur inconnue"));
+		setErrorString(QObject::tr("Unknown error"));
 		return false;
 	}
 

@@ -33,20 +33,20 @@ MetadataDialog::MetadataDialog(const QMap<FF8Installation::Type, FF8Installation
 
 void MetadataDialog::build()
 {
-	HelpWidget *help = new HelpWidget(32, tr("Pour être placées dans le Cloud, "
-											 "les sauvegardes doivent être signées. "
-											 "Ces signatures sont écrites dans un fichier "
-											 "nommé metadata.xml, normalement situé "
-											 "dans le même dossier que vos sauvegardes.\n"
-											 "Pour trouver votre numéro d'utilisateur, "
-											 "regardez le nom du dossier où se trouve vos sauvegardes. "
-											 "Si vous ne voyez pas, essayez en laissant le champ vide.\n"
-											 "Par défaut Hyne tente de signer les sauvegardes "
-											 "automatiquement, mais en cas d'erreur, vous pouvez "
-											 "essayer de le faire manuellement ici."));
+	HelpWidget *help = new HelpWidget(32, tr("To be placed in the cloud, "
+											 "save files must be signed. "
+											 "These signatures are written in a file "
+											 "called metadata.xml, normally located "
+											 "in the same folder as your save files.\n"
+											 "To find your user number, "
+											 "look at the name of the folder where your save files are. "
+											 "If you do not find this folder, try leaving it blank.\n"
+											 "By default Hyne attempts to automatically sign saves, "
+											 "but in case of error, "
+											 "you can try to do it manually here."));
 
 	_path = new QLineEdit(this);
-	_pathButton = new QPushButton(tr("Parcourir..."), this);
+	_pathButton = new QPushButton(tr("Browse..."), this);
 
 	QHBoxLayout *pathLayout = new QHBoxLayout;
 	pathLayout->addWidget(_path);
@@ -65,7 +65,7 @@ void MetadataDialog::build()
 
 	QFormLayout *formLayout = new QFormLayout(_formWidget);
 	formLayout->addRow(tr("metadata.xml"), pathLayout);
-	formLayout->addRow(tr("Numéro d'utilisateur"), _userID);
+	formLayout->addRow(tr("User number"), _userID);
 	formLayout->setContentsMargins(QMargins());
 
 	QVBoxLayout *layout = new QVBoxLayout(this);
@@ -94,7 +94,7 @@ void MetadataDialog::accept()
 {
 	UserDirectory userDir(metadataPath(), userID());
 	if (!userDir.updateSignatures()) {
-		QMessageBox::warning(this, tr("Erreur"), tr("Impossible de mettre à jour les signatures.\n") +
+		QMessageBox::warning(this, tr("Error"), tr("Unable to update signatures.") +
 													userDir.errorString());
 	} else {
 		QDialog::accept();
@@ -107,9 +107,9 @@ void MetadataDialog::setMetadataPath(const QString &path)
 
 	if (path.isNull()) {
 		QStringList filter = QStringList()
-				<< tr("Fichiers XML (*.xml)")
-				<< tr("Tous les fichiers (*)");
-		metadataPath = QFileDialog::getOpenFileName(this, tr("Rechercher metadata.xml"), _path->text(), filter.join(";;"));
+				<< tr("XML files (*.xml)")
+				<< tr("All files (*)");
+		metadataPath = QFileDialog::getOpenFileName(this, tr("Search metadata.xml"), _path->text(), filter.join(";;"));
 		if (metadataPath.isNull()) {
 			return;
 		}

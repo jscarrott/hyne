@@ -45,15 +45,15 @@ QWidget *WorldmapEditor::buildPage1()
 	carStepsE = new SpinBox16(ret);
 	currentCarE = new SpinBox8(ret);
 	currentMapE = new QComboBox(ret);
-	currentMapE->addItem(tr("Aucune"), 0);
+	currentMapE->addItem(tr("None"), 0);
 	currentMapE->addItem(tr("Globe"), 1);
-	currentMapE->addItem(tr("Carte"), 2);
+	currentMapE->addItem(tr("Map"), 2);
 
-	QGroupBox *controlGroupE = new QGroupBox(tr("Véhicule conduit au moins une fois"), ret);
+	QGroupBox *controlGroupE = new QGroupBox(tr("Vehicle driven at least once"), ret);
 	QGridLayout *controlL = new QGridLayout(controlGroupE);
 
 	QStringList texts;
-	texts << tr("Voiture") << tr("???") << tr("BGU") << tr("Chocobo") << tr("Hydre") << tr("???") << tr("???") << tr("???");
+	texts << tr("Car") << tr("???") << tr("Balamb Garden") << tr("Chocobo") << tr("Ragnarok") << tr("???") << tr("???") << tr("???");
 	for (int i = 0; i < 8; ++i)
 	{
 		QCheckBox *controlCheckBox = new QCheckBox(texts.at(i), controlGroupE);
@@ -61,11 +61,11 @@ QWidget *WorldmapEditor::buildPage1()
 		controlL->addWidget(controlCheckBox, i/4, i%4);
 	}
 
-	QGroupBox *koyokGroupE = new QGroupBox(tr("Quête Koyo-K"), ret);
+	QGroupBox *koyokGroupE = new QGroupBox(tr("PuPu Quest"), ret);
 	QGridLayout *koyokL = new QGridLayout(koyokGroupE);
 
 	texts.clear();
-	texts << tr("???") << tr("???") << tr("Mandy Beach") << tr("Winhill") << tr("Trabia") << tr("Désert Kashkabald") << tr("UFO battu") << tr("Koyo-K battu");
+	texts << tr("???") << tr("???") << tr("Mandy Beach") << tr("Winhill") << tr("Trabia") << tr("Kashkabald Desert") << tr("UFO defeated") << tr("PuPu defeated");
 	for (int i = 0; i < 8; ++i)
 	{
 		QCheckBox *koyokCheckBox = new QCheckBox(texts.at(i), koyokGroupE);
@@ -73,11 +73,11 @@ QWidget *WorldmapEditor::buildPage1()
 		koyokL->addWidget(koyokCheckBox, i/4, i%4);
 	}
 
-	QGroupBox *obelGroupE = new QGroupBox(tr("Quête du lac Obel"), ret);
+	QGroupBox *obelGroupE = new QGroupBox(tr("Obel Lake quest"), ret);
 	QGridLayout *obelL = new QGridLayout(obelGroupE);
 
 	texts.clear();
-	texts << tr("Avoir parlé à l'ombre une 1ère fois") << tr("Avoir fredonné un air 2 fois") << tr("Accepter de chercher Ryo") << tr("Avoir vu Ryo") << tr("Ne pas avoir dit à l'ombre où se trouve Ryo") << tr("L'ombre a donné indice Balamb") << tr("Pierre plage Balamb") << tr("Ryo vous dit qu'il est plus fort que vous") << tr("Vous avez fait des ricochets") << tr("Vous avez fait un nombre incalculable de ricochets") << tr("Pierre Ryo") << tr("Pierre montagne Galbadia") << tr("Pierre île Timber") << tr("Toutes les pierres") << tr("L'ombre a donné indice Eldbeak") << tr("Pilier vu à Eldbeak") << tr("Trésor île Minde trouvé") << tr("Trésor Mordor trouvé");
+	texts << tr("Talked with the shadow for the first time") << tr("Hummed a song twice") << tr("Accept to search the Monkey") << tr("Seen the Monkey") << tr("Didn't tell the shadow where the Monkey is") << tr("The shadow gave Balamb hint") << tr("Rock beach Balamb") << tr("The Monkey said he's stronger than you") << tr("You did some skimming stones") << tr("You made a countless amount of ricochets") << tr("The Monkey rock") << tr("Galbadia mountain rock") << tr("Timber island rock") << tr("All rocks") << tr("The shadow gave Eldbeak hint") << tr("Saw pillar at Eldbeak") << tr("Minde island treasure found") << tr("Esthar's mountains treasure found");
 	for (int i = 0; i < texts.size(); ++i)
 	{
 		QCheckBox *obelCheckBox = new QCheckBox(texts.at(i), obelGroupE);
@@ -91,9 +91,9 @@ QWidget *WorldmapEditor::buildPage1()
 	QRadioButton *normal;
 	fixWarnIcon = new QLabel(fixGroup);
 	fixWarnIcon->setPixmap(QApplication::style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(16));
-	fixLabel = new QLabel(tr("Version boguée détectée, il est recommandé de changer de mode :"), fixGroup);
-	normal = new QRadioButton(tr("Version normale"), fixGroup);
-	fix = new QRadioButton(tr("Version française PC boguée"), fixGroup);
+	fixLabel = new QLabel(tr("Bugged version detected, it is recommend to change modes:"), fixGroup);
+	normal = new QRadioButton(tr("Standard version"), fixGroup);
+	fix = new QRadioButton(tr("Buggy french PC version"), fixGroup);
 
 	QHBoxLayout *bugLayout = new QHBoxLayout(fixGroup);
 	bugLayout->addWidget(fixWarnIcon);
@@ -106,13 +106,13 @@ QWidget *WorldmapEditor::buildPage1()
 	normal->setChecked(true);
 
 	QGridLayout *layout = new QGridLayout(ret);
-	layout->addWidget(new QLabel(tr("Lié aux pas"), ret), 0, 0);
+	layout->addWidget(new QLabel(tr("Steps related"), ret), 0, 0);
 	layout->addWidget(stepsE, 0, 1);
-	layout->addWidget(new QLabel(tr("Lié au kmtrage"), ret), 0, 2);
+	layout->addWidget(new QLabel(tr("Mileage related"), ret), 0, 2);
 	layout->addWidget(carStepsE, 0, 3);
-	layout->addWidget(new QLabel(tr("Voiture de location"), ret), 1, 0);
+	layout->addWidget(new QLabel(tr("Rental car"), ret), 1, 0);
 	layout->addWidget(currentCarE, 1, 1);
-	layout->addWidget(new QLabel(tr("Map affichée"), ret), 1, 2);
+	layout->addWidget(new QLabel(tr("Displayed map"), ret), 1, 2);
 	layout->addWidget(currentMapE, 1, 3);
 	layout->addWidget(controlGroupE, 2, 0, 1, 4);
 	layout->addWidget(koyokGroupE, 3, 0, 1, 4);
@@ -134,14 +134,14 @@ QWidget *WorldmapEditor::buildPage2()
 
 	vehiclesList = new QListWidget(ret);
 	vehiclesList->setFont(font);
-	vehiclesList->addItem(tr("Personnage"));
-	vehiclesList->addItem(tr("Inconnu 1"));
-	vehiclesList->addItem(tr("Hydre"));
+	vehiclesList->addItem(tr("Character"));
+	vehiclesList->addItem(tr("Unknown 1"));
+	vehiclesList->addItem(tr("Ragnarock"));
 	vehiclesList->addItem(tr("BGU"));
-	vehiclesList->addItem(tr("Voiture"));
-	vehiclesList->addItem(tr("Inconnu 2"));
-	vehiclesList->addItem(tr("Inconnu 3"));
-	vehiclesList->addItem(tr("Inconnu 4"));
+	vehiclesList->addItem(tr("Car"));
+	vehiclesList->addItem(tr("Unknown 2"));
+	vehiclesList->addItem(tr("Unknown 3"));
+	vehiclesList->addItem(tr("Unknown 4"));
 	vehiclesList->setFixedWidth(90);
 	vehiclesList->setCurrentRow(0);
 

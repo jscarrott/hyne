@@ -27,7 +27,7 @@ class MiscEditor : public PageWidget
 	Q_OBJECT
 public:
 	explicit MiscEditor(QWidget *parent = nullptr);
-	inline QString name() { return tr("Divers"); }
+	inline QString name() { return tr("Miscellaneous"); }
 	void updateMode(bool mode);
 	void updateTime();
 public slots:

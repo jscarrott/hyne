@@ -33,13 +33,13 @@ void FieldEditor::buildWidget()
 	gameMomentList->setUniformRowHeights(true);
 	gameMomentList->setColumnCount(2);
 	gameMomentList->setIndentation(0);
-	gameMomentList->setHeaderLabels(QStringList() << tr("Valeur") << tr("Moment du jeu"));
+	gameMomentList->setHeaderLabels(QStringList() << tr("Value") << tr("Game moment"));
 
 	for (int i = 0; i < 403; ++i) {
 		cInt couple = Data::momentLocation[i];
 
 		int moment = couple.one, loc = couple.two;
-		QTreeWidgetItem *item = new QTreeWidgetItem(QStringList() << QString::number(moment) << (loc >=0 ? Data::locations().value(loc) : tr("Disque %1").arg(-loc)));
+		QTreeWidgetItem *item = new QTreeWidgetItem(QStringList() << QString::number(moment) << (loc >=0 ? Data::locations().value(loc) : tr("Disc %1").arg(-loc)));
 		item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
 		item->setData(0, Qt::UserRole, moment);
 		if (loc < 0) {
@@ -51,16 +51,16 @@ void FieldEditor::buildWidget()
 
 	gameMomentList->resizeColumnToContents(0);
 
-	HelpWidget *info = new HelpWidget(32, tr("Cet éditeur ne change que le moment du jeu, c'est-à-dire une valeur "
-											 "qui change en fonction de votre avancée dans l'aventure principale."
-											 " En changeant cette valeur, la position de votre personnage, les sous-quêtes"
-											 " et autres valeurs ne seront pas modifiées."), this);
+	HelpWidget *info = new HelpWidget(32, tr("This editor change only the moment of the game, wich means a value "
+											 "that changes according to your progress in the main adventure."
+											 " By modify this value, the position of your character, sub-quests"
+											 " and other values will not be affected."), this);
 
 	autoDiscE = new QCheckBox(tr("Auto."), this);
 
 	discE = new QComboBox(this);
 	for (int i = 0; i < 4; ++i) {
-		discE->addItem(tr("Disque %1").arg(i+1), i);
+		discE->addItem(tr("Disc %1").arg(i+1), i);
 	}
 
 	QHBoxLayout *discL = new QHBoxLayout;

@@ -22,25 +22,25 @@
 HeaderDialog::HeaderDialog(SaveData *saveData, QWidget *parent, ViewType viewType)
 	: QDialog(parent, Qt::Dialog | Qt::WindowCloseButtonHint), saveData(saveData), viewType(viewType)
 {
-	setWindowTitle(tr("Propriétés"));
+	setWindowTitle(tr("Properties"));
 
 	group1 = new QGroupBox(tr("Memory card header"), this);
 
-	exists_lbl = new QLabel(tr("Existe :"));
+	exists_lbl = new QLabel(tr("Exists:"));
 	exists_lbl->setTextFormat(Qt::PlainText);
 	exists = new QCheckBox;
 
-	QLabel *country_lbl = new QLabel(tr("Région :"));
+	QLabel *country_lbl = new QLabel(tr("Country:"));
 	country_lbl->setTextFormat(Qt::PlainText);
 	country = new QComboBox;
-	country->addItem(QIcon(":/images/jp.png"), tr("Japon"), COUNTRY_JP);
-	country->addItem(QIcon(":/images/us.png"), tr("Amérique"), COUNTRY_US);
+	country->addItem(QIcon(":/images/jp.png"), tr("Japan"), COUNTRY_JP);
+	country->addItem(QIcon(":/images/us.png"), tr("America"), COUNTRY_US);
 	country->addItem(QIcon(":/images/eu.png"), tr("Europe"), COUNTRY_EU);
-	country->addItem(tr("Invalide"), '\x00');
+	country->addItem(tr("Invalid"), '\x00');
 
 	country->setCurrentIndex(Config::valueVar(Config::LastCountry).toInt());
 
-	QLabel *code_lbl = new QLabel(tr("Code :"));
+	QLabel *code_lbl = new QLabel(tr("Code:"));
 	code_lbl->setTextFormat(Qt::PlainText);
 	code = new QComboBox;
 	code->setEditable(true);
@@ -52,7 +52,7 @@ HeaderDialog::HeaderDialog(SaveData *saveData, QWidget *parent, ViewType viewTyp
 		setCode(lastGameCode);
 	}
 
-	id_lbl = new QLabel(tr("Identifiant :"));
+	id_lbl = new QLabel(tr("Identifier:"));
 	id_lbl->setTextFormat(Qt::PlainText);
 	id = new QComboBox;
 	id->setEditable(true);
@@ -76,11 +76,11 @@ HeaderDialog::HeaderDialog(SaveData *saveData, QWidget *parent, ViewType viewTyp
 
 	desc_auto = new QCheckBox(tr("Auto."));
 
-	QLabel *bloc_lbl = new QLabel(tr("Blocs utilisés :"));
+	QLabel *bloc_lbl = new QLabel(tr("Used slots:"));
 	bloc = new QLabel();
 	bloc->setTextFormat(Qt::PlainText);
 
-	QLabel *desc_lbl = new QLabel(tr("Description :"));
+	QLabel *desc_lbl = new QLabel(tr("Description:"));
 	desc_lbl->setTextFormat(Qt::PlainText);
 
 	QList<SaveIconData> saveIcons;
@@ -92,7 +92,7 @@ HeaderDialog::HeaderDialog(SaveData *saveData, QWidget *parent, ViewType viewTyp
 		}
 	}
 
-	QLabel *icon1_lbl = new QLabel(tr("Icône :"));
+	QLabel *icon1_lbl = new QLabel(tr("Icon:"));
 	icon1_lbl->setTextFormat(Qt::PlainText);
 	icon1 = new QComboBox();
 	icon1->setIconSize(QSize(16, 16));
@@ -103,7 +103,7 @@ HeaderDialog::HeaderDialog(SaveData *saveData, QWidget *parent, ViewType viewTyp
 	QIcon saveIcon(QApplication::style()->standardIcon(QStyle::SP_DialogSaveButton));
 	icon1_saveButton->setIcon(saveIcon);
 	icon1_saveButton->setFlat(true);
-	icon2_lbl = new QLabel(tr("Icône additionnel :"));
+	icon2_lbl = new QLabel(tr("Additional icon:"));
 	icon2_lbl->setTextFormat(Qt::PlainText);
 	icon2 = new QComboBox();
 	icon2->setIconSize(QSize(32, 32));
@@ -336,13 +336,13 @@ void HeaderDialog::saveIcon(bool chocobo_world_icon)
 	QString path, savePathIcon = Config::value(Config::SavePathIcon);
 
 	path = savePathIcon.isEmpty() ? QString() : savePathIcon % "/";
-	path = QFileDialog::getSaveFileName(this, tr("Enregistrer sous"), path % QString("icon%1%2.png").arg(saveData->id()+1).arg(chocobo_world_icon ? "b" : ""), tr("Image PNG (*.png);;Image JPG (*.jpg *.jpeg);;Image BMP (*.bmp)"));
+	path = QFileDialog::getSaveFileName(this, tr("Save As"), path % QString("icon%1%2.png").arg(saveData->id()+1).arg(chocobo_world_icon ? "b" : ""), tr("PNG image (*.png);;JPG image (*.jpg *.jpeg);;BMP image (*.bmp)"));
 	if (path.isEmpty())		return;
 
 	int index = path.lastIndexOf('/');
 	Config::setValue(Config::SavePathIcon, index == -1 ? path : path.left(index));
 
 	if (!saveData->saveIcon().icon(0, chocobo_world_icon).save(path)) {
-		QMessageBox::warning(this, tr("Erreur"), tr("Format incorrect."));
+		QMessageBox::warning(this, tr("Error"), tr("Invalid format."));
 	}
 }

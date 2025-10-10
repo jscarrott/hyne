@@ -117,7 +117,7 @@ QString FF8Installation::typeString() const
 	case Remaster:
 		return QObject::tr("FF8 Remaster");
 	case Custom:
-		return QObject::tr("FF8 personnalisé");
+		return QObject::tr("FF8 custom");
 	}
 	Q_ASSERT(false);
 	return QString();

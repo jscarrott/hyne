@@ -30,32 +30,28 @@ int main(int argc, char *argv[])
 	Config::set();
 
 	QTranslator translator_qt, translator;
-	QString lang = QLocale::system().name().toLower(),
+	QString lang = Config::value(Config::Lang),
 			translationPath = Config::translationDir();
+	QLocale locale = lang.isEmpty() ? QLocale::system() : QLocale(lang);
 
-	lang = Config::value(Config::Lang, lang.left(lang.indexOf("_")));
-
-	if (translator_qt.load("qt_" % lang, translationPath)
-	        || translator_qt.load("qt_" % lang, QLibraryInfo::path(QLibraryInfo::TranslationsPath))) {
+	if (translator_qt.load(locale, "qt", "_", translationPath)
+	        || translator_qt.load(locale, "qt", "_", QLibraryInfo::path(QLibraryInfo::TranslationsPath))) {
 		app.installTranslator(&translator_qt);
 	}
 
-	if (translator.load("hyne_" + lang, translationPath) || translator.load("hyne_" + lang)) {
+	if (translator.load(locale, "hyne", "_", translationPath) || translator.load(locale, "hyne", "_")) {
 		app.installTranslator(&translator);
-	} else if (lang != "fr") {
+	} else if (locale.language() != QLocale::English) {
 		QLocale locale = Window::chooseLangDialog();
-		lang = locale.bcp47Name();
-		if (translator.load("hyne_" + lang, translationPath) || translator.load("hyne_" + lang)) {
+		QString lang = locale.bcp47Name();
+		if (translator.load(locale, "hyne", "_", translationPath) || translator.load(locale, "hyne", "_")) {
 			app.installTranslator(&translator);
 			Config::setValue(Config::Lang, lang);
-		} else if (translator.load("hyne_en", translationPath) || translator.load("hyne_en")) {
-			app.installTranslator(&translator);
-			Config::setValue(Config::Lang, "en");
 		} else {
-			Config::setValue(Config::Lang, "fr");
+			Config::setValue(Config::Lang, "en");
 		}
 	} else {
-		Config::setValue(Config::Lang, "fr");
+		Config::setValue(Config::Lang, "en");
 	}
 	Config::translator = &translator;
 

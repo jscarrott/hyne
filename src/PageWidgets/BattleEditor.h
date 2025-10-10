@@ -26,7 +26,7 @@ class BattleEditor : public PageWidget
 	Q_OBJECT
 public:
 	explicit BattleEditor(QWidget *parent = nullptr);
-	inline QString name() { return tr("Combats"); }
+	inline QString name() { return tr("Battle"); }
 	void updateMode(bool mode);
 public slots:
 	void fillPage();
