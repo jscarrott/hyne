@@ -36,8 +36,8 @@ void TTriadEditor::buildWidget()
 	QVBoxLayout *layout = new QVBoxLayout(this);
 
 	tabWidget = new QTabWidget(this);
-	tabWidget->addTab(buildPage1(), tr("Cartes"));
-	tabWidget->addTab(buildPage2(), tr("Règles et quêtes"));
+	tabWidget->addTab(buildPage1(), tr("Cards"));
+	tabWidget->addTab(buildPage2(), tr("Rules and quests"));
 
 	layout->addWidget(tabWidget);
 	layout->setContentsMargins(QMargins());
@@ -78,7 +78,7 @@ QWidget *TTriadEditor::buildPage1()
 	QStandardItem *standardItem;
 	QIcon cardIcon(":/images/icons/carte.png");
 
-	labels << tr("Nom") << tr("Qté");
+	labels << tr("Name") << tr("Qty");
 	cardE_model->setHorizontalHeaderLabels(labels);
 
 	for (quint8 i = 0; i < 77; ++i)
@@ -86,7 +86,7 @@ QWidget *TTriadEditor::buildPage1()
 		if (i % 11 == 0) {
 			QList<QStandardItem *> items;
 
-			standardItem = new QStandardItem(tr("Niveau %1").arg(i/11 + 1));
+			standardItem = new QStandardItem(tr("Level %1").arg(i/11 + 1));
 			standardItem->setEditable(false);
 			standardItem->setEnabled(false);
 			standardItem->setCheckable(false);
@@ -123,7 +123,7 @@ QWidget *TTriadEditor::buildPage1()
 	cardE_view->header()->setSectionResizeMode(0, QHeaderView::Stretch);
 	cardE_view->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
-	labels.replace(1, tr("Possesseur"));
+	labels.replace(1, tr("Location"));
 	cardE_model2->setHorizontalHeaderLabels(labels);
 
 	for (quint8 i = 0; i < 33; ++i)
@@ -131,7 +131,7 @@ QWidget *TTriadEditor::buildPage1()
 		if (i % 11 == 0) {
 			QList<QStandardItem *> items;
 
-			standardItem = new QStandardItem(tr("Niveau %1").arg(i/11 + 8));
+			standardItem = new QStandardItem(tr("Level %1").arg(i/11 + 8));
 			standardItem->setEditable(false);
 			standardItem->setEnabled(false);
 			standardItem->setCheckable(false);
@@ -169,13 +169,13 @@ QWidget *TTriadEditor::buildPage1()
 	cardE_view2->header()->setSectionResizeMode(1, QHeaderView::Stretch);
 
 	font.setPixelSize(10);
-	QString selectAll = tr("Sélectionner tout");
+	QString selectAll = tr("Select all");
 	QCheckBox *selectAll1 = new QCheckBox(selectAll, ret);
 	QCheckBox *selectAll2 = new QCheckBox(selectAll, ret);
 	selectAll1->setFont(font);
 	selectAll2->setFont(font);
 	QWidget *qtyAll = new QWidget;
-	QPushButton *qtyAllOK = new QPushButton(tr("Tout"), qtyAll);
+	QPushButton *qtyAllOK = new QPushButton(tr("All"), qtyAll);
 	QPushButton *squallAll = new QPushButton(tr("Squall"), ret);
 	qtyAllOK->setFont(font);
 	squallAll->setFont(font);
@@ -196,8 +196,8 @@ QWidget *TTriadEditor::buildPage1()
 	connect(cardE_view->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(changeCardPreview()));
 	connect(cardE_view2->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(changeCardPreview2()));
 
-	HelpWidget *info = new HelpWidget(16, tr("<b>Case cochée :</b> carte connue<br/><b>Possesseur :</b> joueur "
-											 "possédant la carte rare, mettre Squall pour l'avoir dans votre jeu."), ret);
+	HelpWidget *info = new HelpWidget(16, tr("<b>Checked:</b> card known<br/><b>Location:</b> player "
+											 "with the rare card, put Squall to have it in your game."), ret);
 
 	QGridLayout *layout = new QGridLayout(ret);
 	layout->addWidget(info, 0, 2, 2, 1, Qt::AlignTop);
@@ -235,9 +235,9 @@ void TTriadEditor::setCardPreview(int i)
 QWidget *TTriadEditor::buildPage2()
 {
 	QStringList regions;
-	regions << tr("Balamb") << tr("Galbadia")
+	regions << tr("Balamb") << tr("Galabadia")
 			<< tr("Trabia") << tr("Centra") << tr("Dollet")
-			<< tr("Horizon") << tr("Lunar Gate") << tr("Esthar");
+			<< tr("F. Horizon") << tr("Lunar Gate") << tr("Esthar");
 
 	QWidget *ret = new QWidget(this);
 
@@ -247,13 +247,13 @@ QWidget *TTriadEditor::buildPage2()
 	ruleE_list = new QListWidget(ret);
 	ruleE_list->setFont(font);
 	ruleE_list->setUniformItemSizes(true);
-	ruleE_list->addItems(QStringList() << regions << tr("Dernières règles (1)") << tr("Dernières règles (2)"));
+	ruleE_list->addItems(QStringList() << regions << tr("Last rules (1)") << tr("Last rules (3)"));
 	connect(ruleE_list, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(fillRules(QListWidgetItem*,QListWidgetItem*)));
 
-	QGroupBox *group1 = new QGroupBox(tr("Règles"), ret);
+	QGroupBox *group1 = new QGroupBox(tr("Rules"), ret);
 	QVBoxLayout *group1L = new QVBoxLayout(group1);
 	QStringList rules_names;
-	rules_names << tr("Open") << tr("Identique") << tr("Plus") << tr("Aléatoire") << tr("Mort subite") << tr("(Essai)") << tr("Même mur") << tr("Élémentaire");
+	rules_names << tr("Open") << tr("Same") << tr("Plus") << tr("Random") << tr("Sudden Death") << tr("(Retry)") << tr("Same Wall") << tr("Elemental");
 
 	for (int i = 0; i < 8; ++i) {
 		QCheckBox *rule = new QCheckBox(rules_names.at(i), group1);
@@ -262,11 +262,11 @@ QWidget *TTriadEditor::buildPage2()
 	}
 	group1L->addStretch(1);
 
-	group2 = new QGroupBox(tr("Règle du vainqueur"), ret);
+	group2 = new QGroupBox(tr("Trade rule"), ret);
 	QVBoxLayout *group2L = new QVBoxLayout(group2);
 
 	QStringList traderules_names;
-	traderules_names << tr("Aucune") << tr("One") << tr("Change") << tr("Direct") << tr("Totale") << "???" << "???" << "???";
+	traderules_names << tr("None") << tr("One") << tr("Diff") << tr("Direct") << tr("All") << "???" << "???" << "???";
 
 	for (int i = 0; i < 8; ++i) {
 		QRadioButton *tradeRule = new QRadioButton(traderules_names.at(i), group2);
@@ -275,10 +275,10 @@ QWidget *TTriadEditor::buildPage2()
 	}
 	group2L->addStretch(1);
 
-	QGroupBox *group3 = new QGroupBox(tr("Quêtes"), ret);
+	QGroupBox *group3 = new QGroupBox(tr("Quests"), ret);
 	QGridLayout *group3L = new QGridLayout(group3);
 
-	regions.prepend(tr("Aucune"));
+	regions.prepend(tr("None"));
 
 	last_regionE = new QComboBox(group3);
 	int i=0;
@@ -291,7 +291,7 @@ QWidget *TTriadEditor::buildPage2()
 		last2_regionE->addItem(region, i++);
 
 	QStringList cc_names;
-	cc_names << tr("-") << tr("Valet") << tr("Trèfle") << tr("Carreaux") << tr("Pique") << tr("Reine de coeur") << tr("Kadowaki") << tr("Roi des cartes");
+	cc_names << tr("-") << tr("Jack") << tr("Clover") << tr("Diamonds") << tr("Spade") << tr("Queen of heart") << tr("Kadowaki") << tr("King of cards");
 	QList<int> cc_values;
 	cc_values << 0 << 0x1 << 0x3 << 0x13 << 0x17 << 0x1F << 0x021F << 0x221F;
 
@@ -301,7 +301,7 @@ QWidget *TTriadEditor::buildPage2()
 		ccE->addItem(name, cc_values.at(i++));
 
 	queenE = new QComboBox(group3);
-	queenE->addItem(tr("Nulle part"), 0);
+	queenE->addItem(tr("Nowhere"), 0);
 	QStringList queenCities = Data::cities().list().mid(0, 8);
 	i=1;
 	for (const QString &queenCity : std::as_const(queenCities))
@@ -322,32 +322,32 @@ QWidget *TTriadEditor::buildPage2()
 	ttdegenerationE = new SpinBox8(group3);
 
 	ttcardqueenquestE = new QComboBox(group3);
-	ttcardqueenquestE->addItem(tr("Aucune"), 0);
+	ttcardqueenquestE->addItem(tr("None"), 0);
 	ttcardqueenquestE->addItem(tr("Kiros"), 1);
 	ttcardqueenquestE->addItem(tr("Irvine"), 2);
-	ttcardqueenquestE->addItem(tr("GroChocobo"), 3);
-	ttcardqueenquestE->addItem(tr("Helltrain"), 4);
-	ttcardqueenquestE->addItem(tr("Phénix"), 5);
+	ttcardqueenquestE->addItem(tr("Chubby Chocobo"), 3);
+	ttcardqueenquestE->addItem(tr("Doomtrain"), 4);
+	ttcardqueenquestE->addItem(tr("Phoenix"), 5);
 
-	group3L->addWidget(new QLabel(tr("Dernières régions visitées :"),group3), 0, 0);
+	group3L->addWidget(new QLabel(tr("Last region visited:"),group3), 0, 0);
 	group3L->addWidget(last_regionE, 0, 1);
 	group3L->addWidget(last2_regionE, 1, 1);
-	group3L->addWidget(new QLabel(tr("Quête du Groupe CC :"),group3), 0, 2);
+	group3L->addWidget(new QLabel(tr("CC Group quest:"),group3), 0, 2);
 	group3L->addWidget(ccE, 0, 3);
-	group3L->addWidget(new QLabel(tr("Emplacement reine des cartes :"),group3), 2, 0);
+	group3L->addWidget(new QLabel(tr("Card Queen location:"),group3), 2, 0);
 	group3L->addWidget(queenE, 2, 1);
-	group3L->addWidget(new QLabel(tr("Règle du vainqueur de la reine :"),group3), 2, 2);
+	group3L->addWidget(new QLabel(tr("Trade rule of the queen:"),group3), 2, 2);
 	group3L->addWidget(traderule_queenE, 2, 3);
-	group3L->addWidget(new QLabel(tr("Nombre de joueurs règle du vainqueur :"),group3), 3, 0);
+	group3L->addWidget(new QLabel(tr("Trade rating:"),group3), 3, 0);
 	group3L->addWidget(traderatingE, 3, 1);
-	group3L->addWidget(new QLabel(tr("Région règle du vainqueur :"),group3), 3, 2);
+	group3L->addWidget(new QLabel(tr("Trade rule location:"),group3), 3, 2);
 	group3L->addWidget(traderating_regionE, 3, 3);
-	group3L->addWidget(new QLabel(tr("Dégénération :"),group3), 4, 0);
+	group3L->addWidget(new QLabel(tr("Degeneration:"),group3), 4, 0);
 	group3L->addWidget(ttdegenerationE, 4, 1);
-	group3L->addWidget(new QLabel(tr("Dernière carte créée :"),group3), 4, 2);
+	group3L->addWidget(new QLabel(tr("Last created card:"),group3), 4, 2);
 	group3L->addWidget(ttcardqueenquestE, 4, 3);
 
-	QGroupBox *group4 = new QGroupBox(tr("Divers"), ret);
+	QGroupBox *group4 = new QGroupBox(tr("Miscellaneous"), ret);
 	QGridLayout *group4L = new QGridLayout(group4);
 
 	ttvictorycountE = new SpinBox16(group4);
@@ -355,18 +355,18 @@ QWidget *TTriadEditor::buildPage2()
 	ttegalitycountE = new SpinBox16(group4);
 	ttbguvictorycountE = new SpinBox8(group4);
 
-	unknown1E_label = new QLabel(tr("Inconnu 1 :"),group4);
+	unknown1E_label = new QLabel(tr("Unknown 1:"),group4);
 	unknown1E = new SpinBox16(group4);
-	unknown2E_label = new QLabel(tr("Inconnu 2 :"),group4);
+	unknown2E_label = new QLabel(tr("Unknown 2:"),group4);
 	unknown2E = new SpinBox32(group4);
 
-	group4L->addWidget(new QLabel(tr("Nombre de victoires :"),group4), 0, 0);
+	group4L->addWidget(new QLabel(tr("Victory Count:"),group4), 0, 0);
 	group4L->addWidget(ttvictorycountE, 0, 1);
-	group4L->addWidget(new QLabel(tr("Nombre de défaites :"),group4), 0, 2);
+	group4L->addWidget(new QLabel(tr("Defeat Count:"),group4), 0, 2);
 	group4L->addWidget(ttdefeatcountE, 0, 3);
-	group4L->addWidget(new QLabel(tr("Nombre d'égalités :"),group4), 0, 4);
+	group4L->addWidget(new QLabel(tr("Egality Count:"),group4), 0, 4);
 	group4L->addWidget(ttegalitycountE, 0, 5);
-	group4L->addWidget(new QLabel(tr("Nombre de victoires à la BGU :"),group4), 1, 0);
+	group4L->addWidget(new QLabel(tr("BGU Victory Count:"),group4), 1, 0);
 	group4L->addWidget(ttbguvictorycountE, 1, 1);
 	group4L->addWidget(unknown1E_label, 1, 2);
 	group4L->addWidget(unknown1E, 1, 3);
@@ -388,7 +388,7 @@ QWidget *TTriadEditor::buildPage2()
 void TTriadEditor::fillPage()
 {
 	QStandardItem *standardItem;
-	
+
 	for (quint8 i = 0; i < cardE_model->rowCount(); ++i)
 	{
 		int row = cardE_model->item(i)->data(Qt::UserRole+2).toInt();
@@ -398,7 +398,7 @@ void TTriadEditor::fillPage()
 			cardE_model->item(i, 1)->setText(QString::number(data->ttcards.cards[row] & 0x7F));
 		}
 	}
-	
+
 	for (quint8 i = 0; i < cardE_model2->rowCount(); ++i)
 	{
 		int row = cardE_model2->item(i)->data(Qt::UserRole+2).toInt();

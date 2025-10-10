@@ -25,7 +25,7 @@ class ShopEditor : public PageWidget
 	Q_OBJECT
 public:
 	explicit ShopEditor(QWidget *parent = nullptr);
-	inline QString name() { return tr("Boutiques"); }
+	inline QString name() { return tr("Shops"); }
 public slots:
 	void fillPage();
 	void savePage();

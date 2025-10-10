@@ -23,16 +23,15 @@ SCHeaderDialog::SCHeaderDialog(SavecardData *savecardData, QWidget *parent)
 	: QDialog(parent, Qt::Dialog | Qt::WindowCloseButtonHint),
       savecardData(savecardData)
 {
-	setWindowTitle(tr("Signature du fichier"));
+	setWindowTitle(tr("File signature"));
 
 	seed = new QHexEdit(this);
 	seed->setOverwriteMode(true);
 	seed->setAsciiArea(false);
 	HelpWidget *helpWidget =
 	        new HelpWidget(32,
-	                       tr("Pour fonctionner sur votre console, le fichier doit être signé.\n"
-	                          "Pour cela vous devez fournir la clé de diversification (seed key) "
-	                          "associée à votre console."));
+	                       tr("The file must be signed to work on your device.\n"
+	                          "Please provide here the seed key of your Game console."));
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 

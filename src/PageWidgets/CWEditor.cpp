@@ -39,7 +39,7 @@ void CWEditor::buildWidget()
 	pixLayout->addStretch();
 	pixLayout->setContentsMargins(QMargins());
 
-	enabledE = new QGroupBox(tr("Activé"), this);
+	enabledE = new QGroupBox(tr("Enabled"), this);
 	enabledE->setCheckable(true);
 
 	levelE = new SpinBox8(enabledE);
@@ -57,14 +57,14 @@ void CWEditor::buildWidget()
 	itemClassCCountE = new SpinBox8(enabledE);
 	itemClassDCountE = new SpinBox8(enabledE);
 
-	QGroupBox *questGroupE = new QGroupBox(tr("Avancement quête"), enabledE);
+	QGroupBox *questGroupE = new QGroupBox(tr("Quest progression"), enabledE);
 	QGridLayout *questL = new QGridLayout(questGroupE);
 
 	QStringList texts;
-	texts << tr("Dans le Chocobo World")
-		  << tr("MiniMog trouvé") << tr("MiniMog obtenu")
-		  << tr("MiniMog en attente") << tr("Roi démon vaincu")
-		  << tr("Événement courant vu") << tr("Event wait OFF");
+	texts << tr("Inside Chocobo World")
+		  << tr("MiniMog found") << tr("MiniMog obtained")
+		  << tr("MiniMog waiting") << tr("Demon King defeated")
+		  << tr("Current event seen") << tr("Event wait OFF");
 	for (int i = 0; i < 7; ++i) {
 		QCheckBox *questCheckBox = new QCheckBox(texts.at(i));
 		questE.append(questCheckBox);
@@ -73,12 +73,12 @@ void CWEditor::buildWidget()
 		}
 	}
 
-	QGroupBox *starCountGroupE = new QGroupBox(tr("Niveau d'invocation en jeu"), enabledE);
+	QGroupBox *starCountGroupE = new QGroupBox(tr("Summon level in-game"), enabledE);
 	QGridLayout *starCountL = new QGridLayout(starCountGroupE);
 
 	texts.clear();
-	texts << tr("Chocobraise") << tr("Chocoflammes")
-		  << tr("Chocométéore") << tr("Grochocobo");
+	texts << tr("ChocoFire") << tr("ChocoFlare")
+		  << tr("ChocoMeteor") << tr("ChocoBocle");
 	for (int i = 0; i < 4; ++i) {
 		QRadioButton *starCountRadio = new QRadioButton(texts.at(i));
 		starCountE.append(starCountRadio);
@@ -87,33 +87,33 @@ void CWEditor::buildWidget()
 
 	QGridLayout *grid = new QGridLayout(enabledE);
 	grid->addWidget(questE.at(0), 0, 0, 1, 2);
-	grid->addWidget(new QLabel(tr("ID :"),enabledE), 0, 2);
+	grid->addWidget(new QLabel(tr("ID:"),enabledE), 0, 2);
 	grid->addWidget(idE, 0, 3);
-	grid->addWidget(new QLabel(tr("Niveau :"),enabledE), 1, 0);
+	grid->addWidget(new QLabel(tr("Level:"),enabledE), 1, 0);
 	grid->addWidget(levelE, 1, 1);
-	grid->addWidget(new QLabel(tr("Arme :"),enabledE), 1, 2);
+	grid->addWidget(new QLabel(tr("Weapon:"),enabledE), 1, 2);
 	grid->addWidget(weaponE, 1, 3);
-	grid->addWidget(new QLabel(tr("HP actuels :"),enabledE), 2, 0);
+	grid->addWidget(new QLabel(tr("Current HP:"),enabledE), 2, 0);
 	grid->addWidget(currentHpE, 2, 1);
-	grid->addWidget(new QLabel(tr("HP max :"),enabledE), 2, 2);
+	grid->addWidget(new QLabel(tr("HP max:"),enabledE), 2, 2);
 	grid->addWidget(maxHpE, 2, 3);
-	grid->addWidget(new QLabel(tr("Rang (1 est le meilleur) :"),enabledE), 3, 0);
+	grid->addWidget(new QLabel(tr("Rank (1 is the best):"),enabledE), 3, 0);
 	grid->addWidget(rankE, 3, 1);
-	grid->addWidget(new QLabel(tr("Nombre de sauvegardes :"),enabledE), 3, 2);
+	grid->addWidget(new QLabel(tr("Save count:"),enabledE), 3, 2);
 	grid->addWidget(saveCountE, 3, 3);
-	grid->addWidget(new QLabel(tr("Nombre d'objets de classe A :"),enabledE), 4, 0);
+	grid->addWidget(new QLabel(tr("Class A item count:"),enabledE), 4, 0);
 	grid->addWidget(itemClassACountE, 4, 1);
-	grid->addWidget(new QLabel(tr("Nombre d'objets de classe B :"),enabledE), 4, 2);
+	grid->addWidget(new QLabel(tr("Class B item count:"),enabledE), 4, 2);
 	grid->addWidget(itemClassBCountE, 4, 3);
-	grid->addWidget(new QLabel(tr("Nombre d'objets de classe C :"),enabledE), 5, 0);
+	grid->addWidget(new QLabel(tr("Class C item count:"),enabledE), 5, 0);
 	grid->addWidget(itemClassCCountE, 5, 1);
-	grid->addWidget(new QLabel(tr("Nombre d'objets de classe D :"),enabledE), 5, 2);
+	grid->addWidget(new QLabel(tr("Class D item count:"),enabledE), 5, 2);
 	grid->addWidget(itemClassDCountE, 5, 3);
 	grid->addWidget(questGroupE, 6, 0, 1, 4, Qt::AlignTop);
 	grid->addWidget(starCountGroupE, 7, 0, 1, 4, Qt::AlignTop);
 
 	QGridLayout *layout = new QGridLayout(this);
-	layout->addWidget(new QLabel(Data::names().at(BOKO)+tr(" :"),this), 0, 0);
+	layout->addWidget(new QLabel(Data::names().at(BOKO)+tr(":"),this), 0, 0);
 	layout->addWidget(bokoE, 0, 1, 1, 3);
 	layout->addLayout(pixLayout, 0, 4, 6, 1, Qt::AlignRight | Qt::AlignTop);
 	layout->addWidget(enabledE, 1, 0, 1, 4);

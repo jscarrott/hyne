@@ -27,19 +27,19 @@ void AllEditor::buildWidget()
 {
 	tabBar = new QTabBar(this);
 	tabBar->setDrawBase(false);
-	tabBar->addTab(tr("Tout"));
-//	tabBar->addTab(tr("En-tête"));
-//	tabBar->addTab(tr("Divers 1"));
-	tabBar->addTab(tr("Caméra"));
-	tabBar->addTab(tr("Boutiques"));
-	tabBar->addTab(tr("Divers"));
+	tabBar->addTab(tr("All"));
+//	tabBar->addTab(tr("Header"));
+//	tabBar->addTab(tr("Miscellaneous 1"));
+	tabBar->addTab(tr("Camera"));
+	tabBar->addTab(tr("Shops"));
+	tabBar->addTab(tr("Miscellaneous"));
 	tabBar->addTab(tr("Field"));
-	tabBar->addTab(tr("Mappemonde"));
+	tabBar->addTab(tr("Worldmap"));
 	tabBar->addTab(tr("Chocobo World"));
 //	tabBar->addTab(tr("G-Forces"));
-//	tabBar->addTab(tr("Personnages"));
+//	tabBar->addTab(tr("Characters"));
 //	tabBar->addTab(tr("Limit Break"));
-//	tabBar->addTab(tr("Objets"));
+//	tabBar->addTab(tr("Items"));
 //	tabBar->addTab(tr("Config"));
 	hexEdit = new QHexEdit(this);
 

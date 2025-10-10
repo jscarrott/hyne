@@ -74,7 +74,7 @@ QWidget *GfEditor::buildPage1()
 {
 	QWidget *ret = new QWidget(this);
 
-	existsE = new QCheckBox(tr("Disponible"), ret);
+	existsE = new QCheckBox(tr("Available"), ret);
 	connect(existsE, SIGNAL(toggled(bool)), SLOT(changeExists(bool)));
 	nameEdit = new QLineEdit(ret);
 	hpEdit = new SpinBox16(ret);
@@ -88,21 +88,21 @@ QWidget *GfEditor::buildPage1()
 	killsEdit = new SpinBox16(ret);
 	KOsEdit = new SpinBox16(ret);
 
-	inconnu1_labelE = new QLabel(tr("Inconnu :"), ret);
+	inconnu1_labelE = new QLabel(tr("Unknown:"), ret);
 	unknown1E = new SpinBox8(ret);
 
 	QGridLayout *statEditL = new QGridLayout;
-	statEditL->addWidget(new QLabel(tr("Nom :"), ret), 0, 0);
+	statEditL->addWidget(new QLabel(tr("Name:"), ret), 0, 0);
 	statEditL->addWidget(nameEdit, 0, 1);
-	statEditL->addWidget(new QLabel(tr("HP actuels :"), ret), 0, 2);
+	statEditL->addWidget(new QLabel(tr("Current HP:"), ret), 0, 2);
 	statEditL->addWidget(hpEdit, 0, 3);
-	statEditL->addWidget(new QLabel(tr("Niveau :"), ret), 1, 0);
+	statEditL->addWidget(new QLabel(tr("Level:"), ret), 1, 0);
 	statEditL->addWidget(nivEdit, 1, 1);
-	statEditL->addWidget(new QLabel(tr("EXP :"), ret), 1, 2);
+	statEditL->addWidget(new QLabel(tr("EXP:"), ret), 1, 2);
 	statEditL->addWidget(expEdit, 1, 3);
-	statEditL->addWidget(new QLabel(tr("Tués :"), ret), 2, 0);
+	statEditL->addWidget(new QLabel(tr("Kills:"), ret), 2, 0);
 	statEditL->addWidget(killsEdit, 2, 1);
-	statEditL->addWidget(new QLabel(tr("Mort :"), ret), 2, 2);
+	statEditL->addWidget(new QLabel(tr("KOs:"), ret), 2, 2);
 	statEditL->addWidget(KOsEdit, 2, 3);
 	statEditL->addWidget(inconnu1_labelE, 3, 0);
 	statEditL->addWidget(unknown1E, 3, 1);
@@ -117,8 +117,8 @@ QWidget *GfEditor::buildPage1()
 	liste2 = new QTreeWidget(ret);
 	liste->setFont(font);
 	liste2->setFont(font);
-	liste->setHeaderLabels(QStringList() << QString() << tr("Capacités") << tr("PDC"));
-	liste2->setHeaderLabels(QStringList() << QString() << tr("Capacités oubliées"));
+	liste->setHeaderLabels(QStringList() << QString() << tr("Ability") << tr("AP"));
+	liste2->setHeaderLabels(QStringList() << QString() << tr("Forgot Capacity"));
 	liste->setIndentation(0);
 	liste2->setIndentation(0);
 	liste->setColumnHidden(0, true);
@@ -129,23 +129,23 @@ QWidget *GfEditor::buildPage1()
 	liste->setUniformRowHeights(true);
 	liste2->setUniformRowHeights(true);
 
-	addC = new QPushButton(tr("Ajouter"), ret);
+	addC = new QPushButton(tr("Add"), ret);
 	addC->setIcon(QIcon(":/images/plus.png"));
 	connect(addC, SIGNAL(released()), SLOT(add_C()));
 
-	removeC = new QPushButton(tr("Oublier"), ret);
+	removeC = new QPushButton(tr("Forget"), ret);
 	removeC->setIcon(QIcon(":/images/minus.png"));
 	connect(removeC, SIGNAL(released()), SLOT(remove_C()));
 
-	editC = new QPushButton(tr("Modifier"), ret);
+	editC = new QPushButton(tr("Edit"), ret);
 	editC->setIcon(QIcon(":/images/edit.png"));
 	connect(editC, SIGNAL(released()), SLOT(edit_C()));
 
-	learnC = new QPushButton(tr("Apprendre"), ret);
+	learnC = new QPushButton(tr("Learn"), ret);
 	learnC->setIcon(QIcon(":/images/icons/learning.png"));
 	connect(learnC, SIGNAL(released()), SLOT(changeLearning()));
 
-	acquireAllC = new QPushButton(tr("Tout acquérir"), ret);
+	acquireAllC = new QPushButton(tr("Complete All"), ret);
 	connect(acquireAllC, SIGNAL(released()), SLOT(acquireAll()));
 
 	connect(liste, SIGNAL(itemSelectionChanged()), SLOT(enableButtons()));
@@ -159,7 +159,7 @@ QWidget *GfEditor::buildPage1()
 	buttonC->addStretch();
 	buttonC->addWidget(acquireAllC);
 
-	restoreF = new QPushButton(tr("Restaurer"), ret);
+	restoreF = new QPushButton(tr("Restore"), ret);
 	restoreF->setIcon(QIcon(":/images/restore.png"));
 	connect(restoreF, SIGNAL(released()), SLOT(restore_C()));
 
@@ -184,15 +184,15 @@ QWidget *GfEditor::buildPage2()
 {
 	QWidget *ret = new QWidget(this);
 
-	QGroupBox *groupBox = new QGroupBox(tr("Divers"), ret);
+	QGroupBox *groupBox = new QGroupBox(tr("Miscellaneous"), ret);
 
 	grieverE = new QLineEdit;
 	odinE = new QCheckBox(tr("Odin"), groupBox);
 	gilgameshE = new QCheckBox(tr("Gilgamesh"), groupBox);
-	phoenixE = new QCheckBox(tr("Phénix"), groupBox);
+	phoenixE = new QCheckBox(tr("Phoenix"), groupBox);
 
 	QHBoxLayout *grieverLayout = new QHBoxLayout;
-	grieverLayout->addWidget(new QLabel(Data::names().at(GRIEVER)+tr(" :")));
+	grieverLayout->addWidget(new QLabel(Data::names().at(GRIEVER)+tr(":")));
 	grieverLayout->addWidget(grieverE);
 
 	QGridLayout *grid = new QGridLayout(groupBox);
@@ -352,7 +352,7 @@ QTreeWidgetItem *GfEditor::addItem(quint8 abilityID, quint8 type, quint8 innateA
 		break;
 		
 	case 1://Capacités acquises de la GF (noir) et capacités acquises en plus (gris)
-		item = new QTreeWidgetItem(liste, QStringList() << QString("%1").arg(abilityID,3) << Data::abilities().value(abilityID) << tr("Acquis!"));
+		item = new QTreeWidgetItem(liste, QStringList() << QString("%1").arg(abilityID,3) << Data::abilities().value(abilityID) << tr("Complete!"));
 		if (posAbility(abilityID) == -1)
 		{
 			item->setForeground(1, Qt::darkGray);
@@ -418,7 +418,7 @@ void GfEditor::add_C()
 	selection = new QComboBox(&dialog);
 	fillAbilities(selection, abilityIcons());
 	
-	okC = new QPushButton(tr("Ajouter"), &dialog);
+	okC = new QPushButton(tr("Add"), &dialog);
 	okC->setEnabled(posAbility(1) == -1);
 	okC->setIcon(QIcon(":/images/plus.png"));
 	
@@ -446,7 +446,7 @@ void GfEditor::edit_C()
 	quint8 abilityID = selectedItems.first()->text(0).toInt();
 	
 	dialog = new QDialog(this, Qt::Dialog | Qt::WindowCloseButtonHint);
-	dialog->setWindowTitle(tr("Modifier PDC"));
+	dialog->setWindowTitle(tr("Edit AP"));
 
 	APsEdit = new SpinBox8(dialog);
 
@@ -456,9 +456,9 @@ void GfEditor::edit_C()
 	}
 	
 	QLabel *APsMax = new QLabel(QString("/%1").arg(Data::apsTab[abilityID]), dialog);
-	abilityCompleted = new QCheckBox(tr("Acquis!"), dialog);
+	abilityCompleted = new QCheckBox(tr("Complete!"), dialog);
 	abilityCompleted->setChecked(getCompleteAbility(abilityID));
-	okC = new QPushButton(tr("Fermer"), dialog);
+	okC = new QPushButton(tr("Close"), dialog);
 	QPushButton *fullButton = new QPushButton(QString("%1/%1").arg(Data::apsTab[abilityID]), dialog);
 	
 	QGridLayout *grid = new QGridLayout(dialog);
@@ -521,7 +521,7 @@ void GfEditor::enableButtons()
 	learnC->setEnabled(true);
 	editC->setEnabled(posAbility(selectedItems.first()->text(0).toInt()) != -1);
 
-	removeC->setText(posAbility(selectedItems.first()->text(0).toInt()) == -1 ? tr("Supprimer") : tr("Oublier"));
+	removeC->setText(posAbility(selectedItems.first()->text(0).toInt()) == -1 ? tr("Remove") : tr("Forget"));
 }
 
 void GfEditor::enableButtons2()
@@ -594,7 +594,7 @@ void GfEditor::changeAPs()
 		else
 		{
 			setCompleteAbility(abilityID, true);
-			selectedItems.first()->setText(2, tr("Acquis!"));
+			selectedItems.first()->setText(2, tr("Complete!"));
 		}
 	}
 	dialog->close();
@@ -646,7 +646,7 @@ void GfEditor::acquireAll()
 		QTreeWidgetItem *item = liste->topLevelItem(i);
 		quint8 abilityID = item->text(0).toInt();
 		setCompleteAbility(abilityID, true);
-		item->setText(2, tr("Acquis!"));
+		item->setText(2, tr("Complete!"));
 		// optionnal
 		qint8 pos;
 		if ((pos = posAbility(abilityID)) != -1)

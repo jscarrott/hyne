@@ -30,7 +30,7 @@ void BattleEditor::updateMode(bool mode)
 
 void BattleEditor::buildWidget()
 {
-	QGroupBox *statsE = new QGroupBox(tr("Statistiques"), this);
+	QGroupBox *statsE = new QGroupBox(tr("Statistics"), this);
 
 	battlewinE = new SpinBox32(statsE);
 	battleescE = new SpinBox16(statsE);
@@ -45,22 +45,22 @@ void BattleEditor::buildWidget()
 
 	tombyE = new SpinBox32(statsE);
 
-	tombySrE = new QCheckBox(tr("Tomberry Sr vaincu"), statsE);
-	ufoE = new QCheckBox(tr("UFO vaincu"), statsE);
+	tombySrE = new QCheckBox(tr("Tonberry Sr killed"), statsE);
+	ufoE = new QCheckBox(tr("UFO Killed"), statsE);
 
-	firstr1E = new QCheckBox(tr("Premier Elmidea"), statsE);
-	firsteleE = new QCheckBox(tr("Premier Succube"), statsE);
-	firstmtlE = new QCheckBox(tr("Premier T-Rex"), statsE);
-	firstirvinelbE = new QCheckBox(tr("Premier combat avec Irvine"), statsE);
+	firstr1E = new QCheckBox(tr("First Bite Bug"), statsE);
+	firsteleE = new QCheckBox(tr("First Bomb"), statsE);
+	firstmtlE = new QCheckBox(tr("First T-Rexaur"), statsE);
+	firstirvinelbE = new QCheckBox(tr("First Battle with Irvine"), statsE);
 
 	QGridLayout *statsL = new QGridLayout(statsE);
-	statsL->addWidget(new QLabel(tr("Combats gagnés :"),statsE), 0, 0, 1, 3);
+	statsL->addWidget(new QLabel(tr("Battles won:"),statsE), 0, 0, 1, 3);
 	statsL->addWidget(battlewinE, 0, 3, 1, 3);
-	statsL->addWidget(new QLabel(tr("Combats fuis :"),statsE), 0, 6, 1, 3);
+	statsL->addWidget(new QLabel(tr("Battles escaped:"),statsE), 0, 6, 1, 3);
 	statsL->addWidget(battleescE, 0, 9, 1, 3);
-	statsL->addWidget(new QLabel(tr("Monstres tués :"),statsE), 1, 0, 1, 3);
+	statsL->addWidget(new QLabel(tr("Monsters killed:"),statsE), 1, 0, 1, 3);
 	statsL->addLayout(monsterkillL, 1, 3, 1, 3);
-	statsL->addWidget(new QLabel(tr("Tomberry tués :"),statsE), 1, 6, 1, 3);
+	statsL->addWidget(new QLabel(tr("Tonberry killed:"),statsE), 1, 6, 1, 3);
 	statsL->addWidget(tombyE, 1, 9, 1, 3);
 	statsL->addWidget(tombySrE, 2, 0, 1, 4);
 	statsL->addWidget(firstr1E, 2, 4, 1, 4);
@@ -69,12 +69,12 @@ void BattleEditor::buildWidget()
 	statsL->addWidget(firstirvinelbE, 3, 4, 1, 4);
 	statsL->addWidget(ufoE, 3, 8, 1, 4);
 
-	unknownGroupE = new QGroupBox(tr("Inconnu"), this);
+	unknownGroupE = new QGroupBox(tr("Unknown"), this);
 
 	unknown1E = new SpinBox32(unknownGroupE);
 
 	QGridLayout *unknownL = new QGridLayout(unknownGroupE);
-	unknownL->addWidget(new QLabel(tr("Inconnu 1 :"),statsE), 0, 0);
+	unknownL->addWidget(new QLabel(tr("Unknown 1:"),statsE), 0, 0);
 	unknownL->addWidget(unknown1E, 0, 1);
 
 	QFont font;
@@ -82,7 +82,7 @@ void BattleEditor::buildWidget()
 
 	firstdrawE_list = new QTreeWidget(this);
 	firstdrawE_list->setFont(font);
-	firstdrawE_list->setHeaderLabel(tr("Magies vues au moins une fois"));
+	firstdrawE_list->setHeaderLabel(tr("Magic seen once"));
 	firstdrawE_list->setIndentation(0);
 	firstdrawE_list->setUniformRowHeights(true);
 
@@ -95,17 +95,17 @@ void BattleEditor::buildWidget()
 	}
 
 	for (i = size; i < 65; ++i) {
-		item = new QTreeWidgetItem(QStringList(tr("Inutilisé")));
+		item = new QTreeWidgetItem(QStringList(tr("Unused")));
 		item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
 		firstdrawE_list->addTopLevelItem(item);
 	}
 
-	QCheckBox *firstdrawCheckAll = new QCheckBox(tr("Sélectionner tout"), this);
+	QCheckBox *firstdrawCheckAll = new QCheckBox(tr("Select all"), this);
 	connect(firstdrawCheckAll, SIGNAL(toggled(bool)), SLOT(selectAllDraw(bool)));
 
 	firstscanE_list = new QTreeWidget(this);
 	firstscanE_list->setFont(font);
-	firstscanE_list->setHeaderLabel(tr("Scannés au moins une fois"));
+	firstscanE_list->setHeaderLabel(tr("Scanned Once"));
 	firstscanE_list->setIndentation(0);
 	firstscanE_list->setUniformRowHeights(true);
 
@@ -117,7 +117,7 @@ void BattleEditor::buildWidget()
 	}
 
 	for (i = WARD+1; i < 16; ++i) {
-		item = new QTreeWidgetItem(QStringList(tr("Inutilisé")));
+		item = new QTreeWidgetItem(QStringList(tr("Unused")));
 		item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
 		firstscanE_list->addTopLevelItem(item);
 	}
@@ -129,12 +129,12 @@ void BattleEditor::buildWidget()
 	}
 
 	for (i = 16+Data::ennemies().size(); i < 160; ++i) {
-		item = new QTreeWidgetItem(QStringList(tr("Inutilisé")));
+		item = new QTreeWidgetItem(QStringList(tr("Unused")));
 		item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
 		firstscanE_list->addTopLevelItem(item);
 	}
 
-	QCheckBox *firstscanCheckAll = new QCheckBox(tr("Sélectionner tout"), this);
+	QCheckBox *firstscanCheckAll = new QCheckBox(tr("Select all"), this);
 	connect(firstscanCheckAll, SIGNAL(toggled(bool)), SLOT(selectAllScan(bool)));
 
 	font.setPixelSize(10);

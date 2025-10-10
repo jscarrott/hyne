@@ -193,7 +193,7 @@ void SavecardView::replaceSaveData(int saveID, const QByteArray &mimeData)
 		SaveData *saveData = _data->getSave(saveID);
 
 		if (!saveData->isDelete()) {
-			QMessageBox::StandardButton answer = QMessageBox::question(this, tr("Écraser"), tr("Tout le contenu de la sauvegarde sera écrasé.\nContinuer ?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+			QMessageBox::StandardButton answer = QMessageBox::question(this, tr("Overwrite"), tr("All content of the save will be overwritten.\nContinue?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 			if (answer != QMessageBox::Yes) {
 				return;
 			}
@@ -269,7 +269,7 @@ void SavecardView::exportOne(int saveID)
 	name = (name.isEmpty() ? "save" : name) % QString("%1").arg(saveData->id() + 1, 2, 10, QChar('0'));
 
 	path = QFileDialog::getSaveFileName(
-	           this, tr("Exporter"),
+	           this, tr("Export"),
 	           path % name,
 	           types.join(";;"),
 	           &selectedFilter
@@ -289,7 +289,7 @@ void SavecardView::exportOne(int saveID)
 	Config::setValue(Config::SavePath, index == -1 ? path : path.left(index));
 
     if (!_data->saveOne(saveData, path, type, _data->type() != type && (type == SavecardData::Pc || type == SavecardData::PcUncompressed))) {
-		QMessageBox::warning(this, tr("Échec"), tr("Enregistrement échoué, vérifiez que le fichier cible n'est pas utilisé."));
+		QMessageBox::warning(this, tr("Failed"), tr("Save failed, verify that the target file is not used."));
 	}
 }
 
@@ -305,7 +305,7 @@ void SavecardView::newGame(int saveID)
 	if (!saveData)	return;
 
 	if (!saveData->isDelete()) {
-		QMessageBox::StandardButton b = QMessageBox::question(this, tr("Nouvelle partie"), tr("Tout le contenu de la sauvegarde sera remplacé par une nouvelle partie.\nContinuer ?"), QMessageBox::Yes | QMessageBox::No);
+		QMessageBox::StandardButton b = QMessageBox::question(this, tr("New game"), tr("All content of the save will be replaced with a new game.\nContinue?"), QMessageBox::Yes | QMessageBox::No);
 		if (b != QMessageBox::Yes) {
 			return;
 		}
@@ -359,7 +359,7 @@ void SavecardView::removeSave(int saveID)
 	if (!saveData)	return;
 
 	if (!saveData->isDelete()) {
-		QMessageBox::StandardButton b = QMessageBox::question(this, tr("Vider"), tr("Tout le contenu de la sauvegarde sera vidé.\nContinuer ?"), QMessageBox::Yes | QMessageBox::No);
+		QMessageBox::StandardButton b = QMessageBox::question(this, tr("Empty"), tr("All content of the save will be emptied.\nContinue?"), QMessageBox::Yes | QMessageBox::No);
 		if (b != QMessageBox::Yes) {
 			return;
 		}
@@ -399,7 +399,7 @@ void SavecardView::restore(int saveID)
 	SaveData *saveData = _data->getSave(saveID);
 	if (!saveData)	return;
 
-	QMessageBox::StandardButton reponse = QMessageBox::question(this, tr("Sauvegarde supprimée"), tr("Cette sauvegarde a été supprimée, voulez-vous tenter de la réparer ? (succès non garanti)"),
+	QMessageBox::StandardButton reponse = QMessageBox::question(this, tr("Save deleted"), tr("This save has been deleted, do you try to repair it? (Success not guaranteed)"),
 																QMessageBox::Yes | QMessageBox::No);
 	if (reponse != QMessageBox::Yes)  return;
 
@@ -510,7 +510,7 @@ void SavecardView::renderSave(QPainter *painter, const SaveData *saveData, const
 
 		// Level
 		if (!(toBePainted & QRect(271, 36, saveWidth()-271, 24)).isEmpty()) {
-			FF8Text::drawTextArea(painter, QPoint(271, 36), tr("NV%1").arg(saveData->constDescData().nivLeader,3,10,QChar(' ')), 1);
+			FF8Text::drawTextArea(painter, QPoint(271, 36), tr("LV%1").arg(saveData->constDescData().nivLeader,3,10,QChar(' ')), 1);
 		}
 
 		// Disc number
@@ -558,12 +558,12 @@ void SavecardView::renderSave(QPainter *painter, const SaveData *saveData, const
 			if (saveData->isRaw())
 			{
 				// Unavailable block
-				FF8Text::drawTextArea(painter, QPoint(36, 43), tr("Bloc occupé"));
+				FF8Text::drawTextArea(painter, QPoint(36, 43), tr("Used block"));
 			}
 			else if (saveData->isDelete())
 			{
 				// Available block
-				FF8Text::drawTextArea(painter, QPoint(36, 43), tr("Bloc Disponible"));
+				FF8Text::drawTextArea(painter, QPoint(36, 43), tr("unused block"));
 			}
 			else
 			{
@@ -845,14 +845,14 @@ void SavecardView::contextMenuEvent(QContextMenuEvent *event)
 
 	QMenu menu(this);
 	if (!saveData->isDelete() && saveData->isFF8()) {
-		menu.setDefaultAction(menu.addAction(tr("&Modifier..."), this, SLOT(edit())));
-		menu.addAction(tr("&Exporter cette sauvegarde..."), this, SLOT(exportOne()));
+		menu.setDefaultAction(menu.addAction(tr("&Edit..."), this, SLOT(edit())));
+		menu.addAction(tr("&Export this save..."), this, SLOT(exportOne()));
 	}
-	menu.addAction(tr("&Nouvelle partie"), this, SLOT(newGame()));
+	menu.addAction(tr("&New game"), this, SLOT(newGame()));
 	if (!saveData->isDelete()) {
-		menu.addAction(tr("&Vider"), this, SLOT(removeSave()));
+		menu.addAction(tr("E&mpty"), this, SLOT(removeSave()));
 		if (!saveData->isRaw()) {
-			QAction *action = menu.addAction(tr("&Propriétés..."), this, SLOT(properties()));
+			QAction *action = menu.addAction(tr("&Properties..."), this, SLOT(properties()));
 			if (!saveData->isFF8()) {
 				menu.setDefaultAction(action);
 			}

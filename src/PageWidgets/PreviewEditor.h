@@ -49,7 +49,7 @@ class PreviewEditor : public PageWidget
 	Q_OBJECT
 public:
 	explicit PreviewEditor(QWidget *parent=0);
-	inline QString name() { return tr("Aperçu"); }
+	inline QString name() { return tr("Preview"); }
 public slots:
 	void fillPage();
 	void savePage();

@@ -43,8 +43,8 @@ void MiscEditor::buildWidget()
 	QVBoxLayout *layout = new QVBoxLayout(this);
 
 	tabWidget = new QTabWidget(this);
-	tabWidget->addTab(buildPage1(), tr("Divers"));
-	tabWidget->addTab(buildPage2(), tr("Tutoriel"));
+	tabWidget->addTab(buildPage1(), tr("Miscellaneous"));
+	tabWidget->addTab(buildPage2(), tr("Tutorial"));
 
 	layout->addWidget(tabWidget);
 	layout->setContentsMargins(QMargins());
@@ -54,7 +54,7 @@ QWidget *MiscEditor::buildPage1()
 {
 	QWidget *ret = new QWidget(this);
 
-	QGroupBox *statsE = new QGroupBox(tr("Statistiques"), ret);
+	QGroupBox *statsE = new QGroupBox(tr("Statistics"), ret);
 	
 	argentE = new SpinBox32(statsE);
 
@@ -62,10 +62,10 @@ QWidget *MiscEditor::buildPage1()
 	countdownE = new TimeWidget(statsE);
 
 	QHBoxLayout *argent_tempsL = new QHBoxLayout;
-	argent_tempsL->addWidget(new QLabel(tr("Temps :"), statsE));
+	argent_tempsL->addWidget(new QLabel(tr("Time:"), statsE));
 	argent_tempsL->addWidget(timeE);
 	argent_tempsL->addStretch();
-	argent_tempsL->addWidget(new QLabel(tr("Compte à rebours :"), statsE));
+	argent_tempsL->addWidget(new QLabel(tr("Countdown:"), statsE));
 	argent_tempsL->addWidget(countdownE);
 	
 	stepsE = new SpinBox32(statsE);
@@ -83,24 +83,24 @@ QWidget *MiscEditor::buildPage1()
 
 	QGridLayout *statsL = new QGridLayout(statsE);
 	statsL->addLayout(argent_tempsL, 0, 0, 1, 6);
-	statsL->addWidget(new QLabel(tr("Argent :"),statsE), 1, 0);
+	statsL->addWidget(new QLabel(tr("Gil:"),statsE), 1, 0);
 	statsL->addWidget(argentE, 1, 1);
-	statsL->addWidget(new QLabel(tr("Argent Laguna :"),statsE), 1, 2);
+	statsL->addWidget(new QLabel(tr("Gil Laguna:"),statsE), 1, 2);
 	statsL->addWidget(lagunaGilsE, 1, 3);
-	statsL->addWidget(new QLabel(tr("Nombre de pas :"),statsE), 1, 4);
+	statsL->addWidget(new QLabel(tr("Number of steps:"),statsE), 1, 4);
 	statsL->addWidget(stepsE, 1, 5);
-	statsL->addWidget(new QLabel(tr("Niveau Seed :"),statsE), 2, 0);
+	statsL->addWidget(new QLabel(tr("Seed level:"),statsE), 2, 0);
 	statsL->addWidget(seedLvlE, 2, 1);
-	statsL->addWidget(new QLabel(tr("EXP Seed :"),statsE), 2, 2);
+	statsL->addWidget(new QLabel(tr("Seed EXP:"),statsE), 2, 2);
 	statsL->addWidget(seedExpE, 2, 3);
-	statsL->addWidget(new QLabel(tr("Niveau test Seed :"),statsE), 2, 4);
+	statsL->addWidget(new QLabel(tr("SeeD test level:"),statsE), 2, 4);
 	statsL->addWidget(testSeedE, 2, 5);
-	statsL->addWidget(lastFieldLabel = new QLabel(tr("Dernier écran visité :"),statsE), 3, 0);
+	statsL->addWidget(lastFieldLabel = new QLabel(tr("Last visited field:"),statsE), 3, 0);
 	statsL->addWidget(lastFieldE, 3, 1);
-	statsL->addWidget(currentFrameLabel = new QLabel(tr("Current Movie Frame :"),statsE), 3, 2);
+	statsL->addWidget(currentFrameLabel = new QLabel(tr("Current Movie Frame:"),statsE), 3, 2);
 	statsL->addWidget(currentFrameE, 3, 3);
 
-	unknownE = new QGroupBox(tr("Inconnu"), ret);
+	unknownE = new QGroupBox(tr("Unknown"), ret);
 	unknown1E = new SpinBox16(unknownE);
 	unknown2E = new SpinBox16(unknownE);
 	unknown4E = new SpinBox32(unknownE);
@@ -111,21 +111,21 @@ QWidget *MiscEditor::buildPage1()
 	unknown9E = new SpinBox32(unknownE);
 
 	QGridLayout *unknownL = new QGridLayout(unknownE);
-	unknownL->addWidget(new QLabel(tr("Inconnu 1 :"),unknownE), 0, 0);
+	unknownL->addWidget(new QLabel(tr("Unknown 1:"),unknownE), 0, 0);
 	unknownL->addWidget(unknown1E, 0, 1);
-	unknownL->addWidget(new QLabel(tr("Inconnu 2 :"),unknownE), 0, 2);
+	unknownL->addWidget(new QLabel(tr("Unknown 2:"),unknownE), 0, 2);
 	unknownL->addWidget(unknown2E, 0, 3);
-	unknownL->addWidget(new QLabel(tr("Inconnu 3 :"),unknownE), 0, 4);
+	unknownL->addWidget(new QLabel(tr("Unknown 3:"),unknownE), 0, 4);
 	unknownL->addWidget(unknown4E, 0, 5);
-	unknownL->addWidget(new QLabel(tr("Inconnu 4 :"),unknownE), 1, 0);
+	unknownL->addWidget(new QLabel(tr("Unknown 4:"),unknownE), 1, 0);
 	unknownL->addWidget(unknown5E, 1, 1);
-	unknownL->addWidget(new QLabel(tr("Inconnu 5 :"),unknownE), 1, 2);
+	unknownL->addWidget(new QLabel(tr("Unknown 5:"),unknownE), 1, 2);
 	unknownL->addWidget(unknown6E, 1, 3);
-	unknownL->addWidget(new QLabel(tr("Inconnu 6 :"),unknownE), 1, 4);
+	unknownL->addWidget(new QLabel(tr("Unknown 6:"),unknownE), 1, 4);
 	unknownL->addWidget(unknown7E, 1, 5);
-	unknownL->addWidget(new QLabel(tr("Inconnu 7 :"),unknownE), 2, 0);
+	unknownL->addWidget(new QLabel(tr("Unknown 7:"),unknownE), 2, 0);
 	unknownL->addWidget(unknown8E, 2, 1);
-	unknownL->addWidget(new QLabel(tr("Inconnu 8 :"),unknownE), 2, 2);
+	unknownL->addWidget(new QLabel(tr("Unknown 8:"),unknownE), 2, 2);
 	unknownL->addWidget(unknown9E, 2, 3);
 	
 	QVBoxLayout *layout = new QVBoxLayout(ret);
@@ -145,55 +145,55 @@ QWidget *MiscEditor::buildPage2()
 
 	tutoE_list = new QTreeWidget(ret);
 	tutoE_list->setFont(font);
-	tutoE_list->setHeaderLabel(tr("Catégorie"));
+	tutoE_list->setHeaderLabel(tr("Category"));
 	tutoE_list->setIndentation(0);
 	tutoE_list->setUniformRowHeights(true);
 
 	QStringList tutoStrings;
 	tutoStrings
-			<< tr("Lieux/Mine de souffre") << tr("Lieux/Dollet") << tr("Lieux/Timber")
-			<< tr("Lieux/Chaîne TV Timber") << tr("Lieux/Galbadia") << tr("Lieux/Tombe du roi inconnu")
-			<< tr("Lieux/Winhill") << tr("Lieux/Prison du désert") << tr("Lieux/Base des missiles")
-			<< tr("Lieux/Aqueduc d'Horizon") << tr("Lieux/Horizon") << tr("Lieux/Trabia")
-			<< tr("Lieux/Esthar(1)") << tr("Lieux/Esthar(2)") << tr("Lieux/Esthar(3)")
-			<< tr("Lieux/Station balnéaire") << tr("Lieux/Salt Lake") << tr("Lieux/Lune")
-			<< tr("Lieux/Labo de Deep Sea") << tr("Lieux/Fouilles de Deep Sea") << tr("Termes/Compression Temporelle")
-			<< tr("Termes/Origine de la BGU") << tr("Termes/Ondes hertziennes(1)") << tr("Termes/Ondes hertziennes(2)")
-			<< tr("Termes/Larme sélénite") << tr("Termes/Centra") << tr("Termes/Compteur Geyser")
-			<< tr("Termes/Mages et sorcières") << tr("Termes/Pouvoirs magiques") << tr("Termes/Monolithe")
-			<< tr("Termes/Lunatic Pandora") << tr("Termes/Tears Point") << tr("Termes/Sanctuaire d'Adel")
-			<< tr("Termes/L'Hydre") << tr("Termes/Niveau MD") << tr("Termes/Refuge de Centra")
-			<< tr("Termes/Timber Maniacs") << tr("Termes/Eyes On Me") << tr("Personnages/Dr. Geyser")
-			<< tr("Personnages/Hyne") << tr("Personnages/Seeds Blancs") << tr("Personnages/Moomba")
-			<< tr("Personnages/Tribu Shumi") << tr("Personnages/Chocobo") << tr("Personnages/Maire Dobe")
+			<< tr("Location Name/Fire Cavern") << tr("Location Name/Dollet") << tr("Location Name/Timber")
+			<< tr("Location Name/Timber TV Station") << tr("Location Name/Galbadia") << tr("Location Name/Tomb of the Unknown King")
+			<< tr("Location Name/Winhill") << tr("Location Name/D-District Prison") << tr("Location Name/Missile Base")
+			<< tr("Location Name/Horizon Bridge") << tr("Location Name/Fishermans Horizon") << tr("Location Name/Trabia")
+			<< tr("Location Name/Esthar (1)") << tr("Location Name/Esthar (2)") << tr("Location Name/Esthar (3)")
+			<< tr("Location Name/Seaside Station") << tr("Location Name/Great Salt Lake") << tr("Location Name/Moon")
+			<< tr("Location Name/Deep Sea Research Center") << tr("Location Name/Deep Sea Deposit") << tr("Term/Time Compression")
+			<< tr("Term/The truth about the Garden") << tr("Term/Radio Interference (1)") << tr("Term/Radio Interference (2)")
+			<< tr("Term/Lunar Cry") << tr("Term/Centra Civilization") << tr("Term/Odine Items")
+			<< tr("Term/Sorceress") << tr("Term/Sorceress Power & Embodiment") << tr("Term/Crystal Pillar")
+			<< tr("Term/Lunatic Pandora") << tr("Term/Tears' Point") << tr("Term/Adel's Tomb")
+			<< tr("Term/Spaceship Ragnarok") << tr("Term/MD Level") << tr("Term/Centra Shelter")
+			<< tr("Term/Timber Maniacs") << tr("Term/Eyes On Me") << tr("Person/Dr. Odine")
+			<< tr("Person/The Great Hyne") << tr("Person/White SeeD") << tr("Person/Moomba")
+			<< tr("Person/Shumi Tribe") << tr("Person/Chocobo") << tr("Person/Mayor Dobe")
 			<< tr("Zell") << tr("Quistis") << tr("Seifer")
-			<< tr("Selphie") << tr("Linoa") << tr("Irvine")
+			<< tr("Selphie") << tr("Rinoa") << tr("Irvine")
 			<< tr("Edea") << tr("Laguna") << tr("Kiros")
-			<< tr("Ward") << tr("Linoa 2 (Canonisation)") << tr("Inutilisé")
-			<< tr("Inutilisé") << tr("Termes/Réincarnation occulte") << tr("Rapport de combat")
-			<< tr("Rapport Perso") << tr("Rapport G-Force") << tr("Actions/Association G-Force (inutilisé)")
-			<< tr("Actions/Association magique") << tr("Actions/Association élémentale") << tr("Actions/Association mentale")
-			<< tr("Actions/Tutorial G-Forces") << tr("Actions/Écran situation Squall") << tr("Actions/Écran situation Zell")
-			<< tr("Actions/Écran situation Linoa") << tr("Actions/Intervertir") << tr("Inutilisé")
-			<< tr("Minimog") << tr("Rapport G-Force/Golgotha") << tr("Rapport G-Force/Shiva")
-			<< tr("Rapport G-Force/Ifrit") << tr("Rapport G-Force/Ondine") << tr("Rapport G-Force/Taurus")
-			<< tr("Rapport G-Force/Nosferatu") << tr("Rapport G-Force/Ahuri") << tr("Rapport G-Force/Leviathan")
-			<< tr("Rapport G-Force/Zéphyr") << tr("Rapport G-Force/Cerberus") << tr("Rapport G-Force/Alexander")
-			<< tr("Rapport G-Force/Helltrain") << tr("Rapport G-Force/Bahamut") << tr("Rapport G-Force/Pampa")
-			<< tr("Rapport G-Force/Tomberry") << tr("Rapport G-Force/Orbital") << tr("Créa-Mgi-Cél")
-			<< tr("Créa-Mgi-Cél 2") << tr("Créa-Mgi-Gla") << tr("Créa-Mgi-Gla 2")
-			<< tr("Créa-Mgi-Inc") << tr("Créa-Mgi-Inc 2") << tr("Créa-Mgi-Méd")
-			<< tr("Créa-Mgi-Méd 2") << tr("Créa-Mgi-Temp") << tr("Créa-Mgi-Temp 2")
-			<< tr("Créa-Mgi-Mtl") << tr("Créa-Mgi-Mtl 2") << tr("Créa-Mgi-Pro")
-			<< tr("Créa-Mgi-Pro 2") << tr("Créa-Mgi-Tab") << tr("Créa-Mgi-Tab 2")
-			<< tr("Créa-Mgi-Thér") << tr("Créa-Mgi-Thér 2") << tr("Créa-Mgi-Ana")
-			<< tr("Créa-Mgi-Ana 2") << tr("Créa-balles") << tr("Créa-balles 2")
-			<< tr("Créa-outils") << tr("Créa-outils 2") << tr("Créa-Thér-Tab")
-			<< tr("Créa-Thér-Tab 2") << tr("Créa-Thér-GF") << tr("Créa-Thér-GF 2")
-			<< tr("Créa-Capa-GF") << tr("Créa-Capa-GF 2") << tr("Créa-Mgi-Plus")
-			<< tr("Créa-Mgi-Plus 2") << tr("Thér-Niv +") << tr("Thér-Niv + 2")
-			<< tr("Freud") << tr("Créa-Mgi-Max") << tr("Créa-Mgi-Max 2")
-			<< tr("Inutilisé") << tr("Diplôme Minotaure");
+			<< tr("Ward") << tr("Rinoa 2 (Angelo wing)") << tr("Unused")
+			<< tr("Unused") << tr("Term/Succession of Sorceress Power") << tr("Battle Report")
+			<< tr("Character Report") << tr("GF Report") << tr("Online Help/GF Junction")
+			<< tr("Online Help/Magic Junction") << tr("Online Help/Junction to Elements") << tr("Online Help/Junction of Status")
+			<< tr("Online Help/GF Tutorial") << tr("Online Help/Squall's Status Screen") << tr("Online Help/Zell's Status Screen")
+			<< tr("Online Help/Rinoa's Status Screen") << tr("Online Help/Switch") << tr("Unused")
+			<< tr("MiniMog") << tr("GF Report/Quezacotl") << tr("GF Report/Shiva")
+			<< tr("GF Report/Ifrit") << tr("GF Report/Siren") << tr("GF Report/Brothers")
+			<< tr("GF Report/Diablos") << tr("GF Report/Carbuncle") << tr("GF Report/Leviathan")
+			<< tr("GF Report/Pandemona") << tr("GF Report/Cerberus") << tr("GF Report/Alexander")
+			<< tr("GF Report/Doomtrain") << tr("GF Report/Bahamut") << tr("GF Report/Cactuar")
+			<< tr("GF Report/Tonberry") << tr("GF Report/Eden") << tr("T Mag-RF")
+			<< tr("T Mag-RF 2") << tr("I Mag-RF") << tr("I Mag-RF 2")
+			<< tr("F Mag-RF") << tr("F Mag-RF 2") << tr("L Mag-RF")
+			<< tr("L Mag-RF 2") << tr("Time Mag-RF") << tr("Time Mag-RF 2")
+			<< tr("ST Mag-RF") << tr("ST Mag-RF 2") << tr("Supt Mag-RF")
+			<< tr("Supt Mag-RF 2") << tr("Forbid Mag-RF") << tr("Forbid Mag-RF 2")
+			<< tr("Recov Med-RF") << tr("Recov Med-RF 2") << tr("ST Med-RF")
+			<< tr("ST Med-RF 2") << tr("Ammo-RF") << tr("Ammo-RF 2")
+			<< tr("Tool-RF") << tr("Tool-RF 2") << tr("Forbid Med-RF")
+			<< tr("Forbid Med-RF 2") << tr("GFRecov Med-RF") << tr("GFRecov Med-RF 2")
+			<< tr("GFAbl Med-RF") << tr("GFAbl Med-RF 2") << tr("Mid Mag-RF")
+			<< tr("Mid Mag-RF 2") << tr("Med LV Up") << tr("Med LV Up 2")
+			<< tr("Ribbon") << tr("High Mag-RF") << tr("High Mag-RF 2")
+			<< tr("Unused") << tr("Proof of Omega");
 
 	for (const QString &tutoString : std::as_const(tutoStrings)) {
 		QTreeWidgetItem *item = new QTreeWidgetItem(QStringList(tutoString));
@@ -201,7 +201,7 @@ QWidget *MiscEditor::buildPage2()
 		tutoE_list->addTopLevelItem(item);
 	}
 
-	QCheckBox *tutoCheckAll = new QCheckBox(tr("Sélectionner tout"), ret);
+	QCheckBox *tutoCheckAll = new QCheckBox(tr("Select all"), ret);
 	connect(tutoCheckAll, SIGNAL(toggled(bool)), SLOT(selectAll(bool)));
 
 	font.setPixelSize(10);

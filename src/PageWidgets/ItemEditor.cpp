@@ -26,8 +26,8 @@ ItemEditor::ItemEditor(QWidget *parent)
 void ItemEditor::buildWidget()
 {
 	QTabWidget *tabWidget = new QTabWidget(this);
-	tabWidget->addTab(buildPage1(), tr("Objets"));
-	tabWidget->addTab(buildPage2(), tr("Ordre en combat"));
+	tabWidget->addTab(buildPage1(), tr("Items"));
+	tabWidget->addTab(buildPage2(), tr("Battle order"));
 	tabWidget->addTab(buildPage3(), tr("Magazines"));
 
 	QVBoxLayout *layout = new QVBoxLayout(this);
@@ -55,18 +55,18 @@ QWidget *ItemEditor::buildPage1()
 
 	QWidget *buttonsW = new QWidget(ret);
 
-	QPushButton *allItems = new QPushButton(tr("Tous les objets"), buttonsW);
-	QPushButton *type_sort = new QPushButton(tr("Type"), buttonsW);
-	QPushButton *alpha_sort = new QPushButton(tr("Ordre alphabétique"), buttonsW);
+	QPushButton *allItems = new QPushButton(tr("All items"), buttonsW);
+	QPushButton *type_sort = new QPushButton(tr("By type"), buttonsW);
+	QPushButton *alpha_sort = new QPushButton(tr("Alphabetically"), buttonsW);
 
 	QHBoxLayout *buttons = new QHBoxLayout(buttonsW);
 	buttons->addWidget(allItems);
 	buttons->addStretch();
-	buttons->addWidget(new QLabel(tr("Trier par :"), buttonsW));
+	buttons->addWidget(new QLabel(tr("Sort:"), buttonsW));
 	buttons->addWidget(type_sort);
 	buttons->addWidget(alpha_sort);
 	buttons->setContentsMargins(QMargins());
-	
+
 	QVBoxLayout *layout = new QVBoxLayout(ret);
 	layout->addWidget(itemE_view);
 	layout->addWidget(buttonsW);
@@ -90,8 +90,7 @@ QWidget *ItemEditor::buildPage2()
 	battle_itemE_list->setDragDropMode(QAbstractItemView::InternalMove);
 	battle_itemE_list->setUniformItemSizes(true);
 
-	HelpWidget *info = new HelpWidget(16, tr("Déplacez les éléments à la souris pour modifier l'ordre "
-											 "des objets en combat."), ret);
+	HelpWidget *info = new HelpWidget(16, tr("Move items with your cursor to change the order of items in battle."), ret);
 
 	QVBoxLayout *layout = new QVBoxLayout(ret);
 	layout->addWidget(info);
@@ -109,7 +108,7 @@ QWidget *ItemEditor::buildPage3()
 	QTreeWidgetItem *item;
 	weaponsE_list = new QTreeWidget(ret);
 	weaponsE_list->setFont(font);
-	weaponsE_list->setHeaderLabel(tr("Fanzine des Fanas de Flingues"));
+	weaponsE_list->setHeaderLabel(tr("Weapons"));
 	weaponsE_list->setIndentation(0);
 	weaponsE_list->setUniformRowHeights(true);
 
@@ -120,12 +119,12 @@ QWidget *ItemEditor::buildPage3()
 		weaponsE_list->addTopLevelItem(item);
 	}
 	for (int i = 28; i < 32; ++i) {
-		item = new QTreeWidgetItem(QStringList(tr("Inutilisé")));
+		item = new QTreeWidgetItem(QStringList(tr("Unused")));
 		item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
 		weaponsE_list->addTopLevelItem(item);
 	}
 
-	QCheckBox *weaponsCheckAll = new QCheckBox(tr("Sélectionner tout"), ret);
+	QCheckBox *weaponsCheckAll = new QCheckBox(tr("Select all"), ret);
 	connect(weaponsCheckAll, SIGNAL(toggled(bool)), SLOT(selectAllWeapons(bool)));
 
 	timbermaniacsE_list = new QTreeWidget(ret);
@@ -135,10 +134,10 @@ QWidget *ItemEditor::buildPage3()
 	timbermaniacsE_list->setUniformRowHeights(true);
 
 	QStringList timbermaniacsStrings;
-	timbermaniacsStrings << tr("Hôtel de Balamb") << tr("Gare de Balamb") << tr("Pub de Dollet") << tr("Hôtel de Dollet")
-						 << tr("Bureau de rédaction de Timber") << tr("Hôtel de Timber") << tr("Hôtel de Deling City") << tr("Horizon : Maison du bricoleur")
-						 << tr("Hôtel d'Horizon") << tr("Université de Trabia - Cimetière") << tr("Ruines de Centra (automatique)") << tr("Village Shumi : Maison du bricoleur")
-						 << tr("Orphelinat d'Edea") << tr("Bateau des seeds blancs") << tr("Inutilisé") << tr("Inutilisé");
+	timbermaniacsStrings << tr("Balamb Hotel") << tr("Balamb Station") << tr("Dollet Pub") << tr("Dollet Hotel")
+						 << tr("Timber Maniacs Redaction") << tr("Timber Hotel") << tr("Deling City Hotel") << tr("Horizon: handyman's House")
+						 << tr("Horizon Hotel") << tr("Trabia-Garden - Cemetery") << tr("Centra Ruins (automatic)") << tr("Shumi Village: Handyman's House")
+						 << tr("Edea's House") << tr("White SeeD Ship") << tr("Unused") << tr("Unused");
 
 	for (const QString &timbermaniacsString : std::as_const(timbermaniacsStrings)) {
 		item = new QTreeWidgetItem(QStringList(timbermaniacsString));
@@ -146,7 +145,7 @@ QWidget *ItemEditor::buildPage3()
 		timbermaniacsE_list->addTopLevelItem(item);
 	}
 
-	QCheckBox *timbermaniacsCheckAll = new QCheckBox(tr("Sélectionner tout"), ret);
+	QCheckBox *timbermaniacsCheckAll = new QCheckBox(tr("Select all"), ret);
 	connect(timbermaniacsCheckAll, SIGNAL(toggled(bool)), SLOT(selectAllTimberManiacs(bool)));
 
 	font.setPixelSize(10);
@@ -167,29 +166,29 @@ void ItemEditor::fillPage()
 	quint8 itemID;
 	QList<quint8> items;
 	QMultiMap<int, int> battleOrder;
-	
+
 	itemE_model->clear();
-	itemE_model->setHorizontalHeaderLabels(QStringList() << tr("Nom") << tr("Qté"));
+	itemE_model->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Qty"));
 	int i;
 	for (i = 0; i < 198; ++i)
 	{
 		itemID = data->items.items[i] & 0xFF;
 
 		if (itemID != 0)		items.append(itemID);
-		
+
 		QList<QStandardItem *> items;
 		QStandardItem *standardItem = new QStandardItem(Data::items().value(itemID, QString::number(itemID)));
 		standardItem->setData(SpinBoxDelegate::ComboBoxItems, Qt::UserRole);
 		standardItem->setData(itemID);
 		standardItem->setIcon(itemID == 0 ? QIcon() : QIcon(QString(":/images/icons/objet%1.png").arg(Data::itemType(itemID))));
 		items.append(standardItem);
-		
+
 		standardItem = new QStandardItem(QString::number(data->items.items[i] >> 8));
 		standardItem->setData(SpinBoxDelegate::SpinBox255, Qt::UserRole);
 		items.append(standardItem);
 		itemE_model->appendRow(items);
 	}
-	
+
 	battle_itemE_list->clear();
 	itemE_view->header()->setSectionResizeMode(0, QHeaderView::Stretch);
 	itemE_view->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);

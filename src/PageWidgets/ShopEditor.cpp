@@ -58,13 +58,13 @@ void ShopEditor::buildWidget()
 	rareItems[5] << 2 << 3 << 5 << 6 << 14;
 
 	QStringList shops;
-	shops << tr("Pet Shop de Timber") << tr("Boutique de Balamb") << tr("Boutique de Dollet")
-		  << tr("Boutique de Timber") << tr("Boutique de Deling City") << tr("Boutique de Winhill")
-		  << tr("Boutique d'Horizon") << tr("Boutique de Trabia ?") << tr("Boutique d'Esthar")
-		  << tr("Boutique de Balamb ? (Laguna)") << tr("Boutique de Dollet ? (Laguna)") << tr("Boutique de Timber ? (Laguna)")
-		  << tr("Boutique de Deling City ? (Laguna)") << tr("Boutique de Winhill (Laguna)") << tr("Boutique d'Horizon ? (Laguna)")
-		  << tr("Boutique de Trabia ? (Laguna)") << tr("Garde de l'université") << tr("Pet Shop d'Esthar")
-		  << tr("Librairie d'Esthar") << tr("Magasin d'Esthar!");
+	shops << tr("Timber Pet Shop") << tr("Balamb Shop") << tr("Dollet Shop")
+		  << tr("Timber Shop") << tr("Deling City Shop") << tr("Winhill Shop")
+		  << tr("FH Shop") << tr("Trabia Shop?") << tr("Esthar Shop")
+		  << tr("Balamb Shop? (Laguna)") << tr("Dollet Shop? (Laguna)") << tr("Timber Shop? (Laguna)")
+		  << tr("Deling City Shop? (Laguna)") << tr("Winhill Shop (Laguna)") << tr("FH Shop? (Laguna)")
+		  << tr("Trabia Shop? (Laguna)") << tr("Man from Garden") << tr("Esthar Pet Shop")
+		  << tr("Esthar Book Store") << tr("Esthar Shop!!");
 
 	shopList->addItems(shops);
 	for (int i = 0; i < 20; ++i) {
@@ -73,9 +73,9 @@ void ShopEditor::buildWidget()
 
 	normalItemColor = shopList->item(0)->foreground();
 
-	shopEnabledE = new QCheckBox(tr("Magasin visité au moins une fois"), this);
+	shopEnabledE = new QCheckBox(tr("Shop visited once"), this);
 
-	HelpWidget *info = new HelpWidget(16, tr("Les valeurs concernant les objets semblent ne pas être utilisées par le jeu."), this);
+	HelpWidget *info = new HelpWidget(16, tr("The values ​​for the items appear not to be used by the game."), this);
 
 	itemList = new QListWidget(this);
 	itemList->setFont(font);
