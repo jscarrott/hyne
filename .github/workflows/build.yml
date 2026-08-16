@@ -287,6 +287,11 @@ jobs:
     if: (github.event.ref_type != 'tag') && (github.ref == 'refs/heads/master')
     concurrency: pre-release-${{ github.ref }}
     runs-on: ubuntu-latest
+    # Creating the release needs more than the read only token repositories
+    # hand out by default, otherwise the deploy step fails with
+    # "Resource not accessible by integration"
+    permissions:
+      contents: write
     steps:
     - name: Download Files
       uses: actions/download-artifact@v4
@@ -308,6 +313,8 @@ jobs:
     if: github.event.ref_type == 'tag'
     concurrency: release-${{ github.ref }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
     - name: Download Files
       uses: actions/download-artifact@v4
