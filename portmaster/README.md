@@ -34,7 +34,7 @@ changes their values, so nothing needs the pointer.
 | D-pad left / right | Change the focused value, move inside a list |
 | A | Activate: press a button, tick a box, open a save |
 | B | Escape, close a dialog |
-| X | Confirm a dialog, commit a field |
+| X | Confirm a dialog, commit a field, edit the highlighted list row |
 | Y | Jump to the next control (out of a list) |
 | L1 / R1 | Previous / next editor page |
 | L2 / R2 | Scroll a page, jump through the memory card |

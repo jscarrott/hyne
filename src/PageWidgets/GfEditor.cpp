@@ -151,7 +151,9 @@ QWidget *GfEditor::buildPage1()
 	connect(acquireAllC, SIGNAL(released()), SLOT(acquireAll()));
 
 	connect(liste, SIGNAL(itemSelectionChanged()), SLOT(enableButtons()));
-	connect(liste, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), SLOT(edit_C(QTreeWidgetItem*)));
+	// Activation covers the double click and the Enter key, so the ability
+	// under the cursor can be edited without a pointer
+	connect(liste, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(edit_C(QTreeWidgetItem*)));
 
 	QVBoxLayout *buttonC = new QVBoxLayout;
 	buttonC->addWidget(addC);
@@ -166,7 +168,7 @@ QWidget *GfEditor::buildPage1()
 	connect(restoreF, SIGNAL(released()), SLOT(restore_C()));
 
 	connect(liste2, SIGNAL(itemSelectionChanged()), SLOT(enableButtons2()));
-	connect(liste2, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), SLOT(restore_C()));
+	connect(liste2, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(restore_C()));
 
 	QGridLayout *grid = new QGridLayout(ret);
 	grid->addWidget(existsE, 0, 0, 1, 4);
