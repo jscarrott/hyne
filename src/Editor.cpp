@@ -36,13 +36,15 @@
 Editor::Editor(QWidget *parent) :
 	QWidget(parent)
 {
+	const bool compact = Config::compactMode();
+
 	QFont font;
-	font.setPointSize(9);
+	font.setPointSize(compact ? 7 : 9);
 
 	liste = new QListWidget(this);
 	liste->setFont(font);
 	liste->setUniformItemSizes(true);
-	liste->setFixedWidth(96);
+	liste->setFixedWidth(compact ? 72 : 96);
 	liste->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	QPushButton *apply = new QPushButton(tr("&OK"), this);
@@ -65,32 +67,45 @@ Editor::Editor(QWidget *parent) :
 		cancel->setStyle(style);
 
 	stackedLayout = new QStackedLayout;
-	
-	QGridLayout *gridLayout = new QGridLayout(this);
-	gridLayout->addWidget(liste, 0, 0);
-	gridLayout->addWidget(apply, 1, 0);
-	gridLayout->addWidget(cancel, 2, 0);
-	gridLayout->addLayout(stackedLayout, 0, 1, 3, 1);
-	gridLayout->setContentsMargins(QMargins(gridLayout->verticalSpacing(),gridLayout->verticalSpacing(),gridLayout->verticalSpacing(),gridLayout->verticalSpacing()));
-	
-	stackedLayout->addWidget(new GfEditor(this));
-	stackedLayout->addWidget(new PersoEditor(this));
-	stackedLayout->addWidget(new ItemEditor(this));
-	stackedLayout->addWidget(new ShopEditor(this));
-	stackedLayout->addWidget(new TTriadEditor(this));
-	stackedLayout->addWidget(new DrawPointEditor(this));
-	stackedLayout->addWidget(new BattleEditor(this));
-	stackedLayout->addWidget(new FieldEditor(this));
-	stackedLayout->addWidget(new WorldmapEditor(this));
-	stackedLayout->addWidget(new CWEditor(this));
-	stackedLayout->addWidget(new PartyEditor(this));
-	stackedLayout->addWidget(new MiscEditor(this));
-	stackedLayout->addWidget(new ConfigEditor(this));
-	stackedLayout->addWidget(new PreviewEditor(this));
-	stackedLayout->addWidget(new AllEditor(this));
 
-	for (int i = 0; i < stackedLayout->count(); ++i)
-		liste->addItem(static_cast<PageWidget *>(stackedLayout->widget(i))->name());
+	QGridLayout *gridLayout = new QGridLayout(this);
+	if (compact) {
+		// One button row under the page list, the pages need every pixel
+		QHBoxLayout *buttonsLayout = new QHBoxLayout;
+		buttonsLayout->setContentsMargins(0, 0, 0, 0);
+		buttonsLayout->addWidget(apply);
+		buttonsLayout->addWidget(cancel);
+		gridLayout->addWidget(liste, 0, 0);
+		gridLayout->addLayout(buttonsLayout, 1, 0);
+		gridLayout->addLayout(stackedLayout, 0, 1, 2, 1);
+		gridLayout->setContentsMargins(QMargins(2, 2, 2, 2));
+		gridLayout->setSpacing(2);
+	} else {
+		gridLayout->addWidget(liste, 0, 0);
+		gridLayout->addWidget(apply, 1, 0);
+		gridLayout->addWidget(cancel, 2, 0);
+		gridLayout->addLayout(stackedLayout, 0, 1, 3, 1);
+		gridLayout->setContentsMargins(QMargins(gridLayout->verticalSpacing(),gridLayout->verticalSpacing(),gridLayout->verticalSpacing(),gridLayout->verticalSpacing()));
+	}
+
+	addPage(new GfEditor(this));
+	addPage(new PersoEditor(this));
+	addPage(new ItemEditor(this));
+	addPage(new ShopEditor(this));
+	addPage(new TTriadEditor(this));
+	addPage(new DrawPointEditor(this));
+	addPage(new BattleEditor(this));
+	addPage(new FieldEditor(this));
+	addPage(new WorldmapEditor(this));
+	addPage(new CWEditor(this));
+	addPage(new PartyEditor(this));
+	addPage(new MiscEditor(this));
+	addPage(new ConfigEditor(this));
+	addPage(new PreviewEditor(this));
+	addPage(new AllEditor(this));
+
+	for (PageWidget *page : std::as_const(pages))
+		liste->addItem(page->name());
 
 	liste->item(liste->count()-1)->setHidden(!Config::mode());
 	
@@ -98,6 +113,44 @@ Editor::Editor(QWidget *parent) :
 	        SLOT(setCurrentSection(QListWidgetItem*,QListWidgetItem*)));
 	connect(apply, SIGNAL(released()), SLOT(save()));
 	connect(cancel, SIGNAL(released()), SIGNAL(rejected()));
+}
+
+void Editor::addPage(PageWidget *page)
+{
+	pages.append(page);
+
+	if (Config::compactMode()) {
+		// Pages are designed for a 768x502 window, let them scroll instead
+		QScrollArea *scrollArea = new QScrollArea(this);
+		scrollArea->setFrameShape(QFrame::NoFrame);
+		scrollArea->setWidgetResizable(true);
+		scrollArea->setWidget(page);
+		stackedLayout->addWidget(scrollArea);
+	} else {
+		stackedLayout->addWidget(page);
+	}
+}
+
+void Editor::showPreviousPage()
+{
+	int row = liste->currentRow();
+
+	do {
+		row = row > 0 ? row - 1 : liste->count() - 1;
+	} while (liste->item(row)->isHidden() && row != liste->currentRow());
+
+	liste->setCurrentRow(row);
+}
+
+void Editor::showNextPage()
+{
+	int row = liste->currentRow();
+
+	do {
+		row = row < liste->count() - 1 ? row + 1 : 0;
+	} while (liste->item(row)->isHidden() && row != liste->currentRow());
+
+	liste->setCurrentRow(row);
 }
 
 void Editor::setCurrentSection(QListWidgetItem *current, QListWidgetItem *previous)
@@ -110,7 +163,7 @@ void Editor::setCurrentSection(QListWidgetItem *current, QListWidgetItem *previo
 	}
 
 	if (previous != nullptr) {
-		pageWidget = static_cast<PageWidget *>(stackedLayout->widget(liste->row(previous)));
+		pageWidget = pages.at(liste->row(previous));
 		if (pageWidget->isLoaded()) {
 			pageWidget->savePage();
 		}
@@ -118,7 +171,7 @@ void Editor::setCurrentSection(QListWidgetItem *current, QListWidgetItem *previo
 
 	int id = liste->currentRow();
 
-	pageWidget = static_cast<PageWidget *>(stackedLayout->widget(id));
+	pageWidget = pages.at(id);
 	if (!pageWidget->isLoaded()) {
 		pageWidget->load(&saveDataCopy, pc);
 	}
@@ -135,9 +188,8 @@ void Editor::load(SaveData *saveData, bool pc)
 	this->saveData = saveData;
 	this->saveDataCopy = *saveData;
 
-	int pageCount = stackedLayout->count();
-	for (int i = 0; i < pageCount; ++i) {
-		static_cast<PageWidget *>(stackedLayout->widget(i))->unload();
+	for (PageWidget *pageWidget : std::as_const(pages)) {
+		pageWidget->unload();
 	}
 
 	setCurrentSection(liste->currentItem());
@@ -146,9 +198,7 @@ void Editor::load(SaveData *saveData, bool pc)
 void Editor::save()
 {
 	bool saveOneAtLeast = false;
-	int pageCount = stackedLayout->count();
-	for (int i = 0; i < pageCount; ++i) {
-		PageWidget *pageWidget = static_cast<PageWidget *>(stackedLayout->widget(i));
+	for (PageWidget *pageWidget : std::as_const(pages)) {
 		if (pageWidget->isLoaded()) {
 			pageWidget->savePage();
 			saveOneAtLeast = true;
@@ -172,9 +222,7 @@ void Editor::updateMode(bool mode)
 		liste->setCurrentRow(0);
 	}
 
-	int pageCount = stackedLayout->count();
-	for (int i = 0; i < pageCount; ++i) {
-		PageWidget *pageWidget = static_cast<PageWidget *>(stackedLayout->widget(i));
+	for (PageWidget *pageWidget : std::as_const(pages)) {
 		if (pageWidget->isBuilded()) {
 			pageWidget->updateMode(mode);
 			pageWidget->updateModeAfter(mode);
@@ -184,9 +232,7 @@ void Editor::updateMode(bool mode)
 
 void Editor::updateTime()
 {
-	int pageCount = stackedLayout->count();
-	for (int i = 0; i < pageCount; ++i) {
-		PageWidget *pageWidget = static_cast<PageWidget *>(stackedLayout->widget(i));
+	for (PageWidget *pageWidget : std::as_const(pages)) {
 		if (pageWidget->isLoaded()) {
 			pageWidget->updateTime();
 		}

@@ -24,10 +24,86 @@ PageWidget::PageWidget(QWidget *parent) :
 	builded = loaded = false;
 }
 
+void PageWidget::stackVertically(QWidget *widget)
+{
+	QGridLayout *grid = qobject_cast<QGridLayout *>(widget->layout());
+
+	if (grid == nullptr) {
+		QBoxLayout *box = qobject_cast<QBoxLayout *>(widget->layout());
+		if (box != nullptr) {
+			box->setDirection(QBoxLayout::TopToBottom);
+		}
+		return;
+	}
+
+	QList<QLayoutItem *> items;
+	while (grid->count() > 0) {
+		items.append(grid->takeAt(0));
+	}
+
+	for (int column = 1; column < grid->columnCount(); ++column) {
+		grid->setColumnStretch(column, 0);
+		grid->setColumnMinimumWidth(column, 0);
+	}
+
+	int row = 0;
+	for (QLayoutItem *item : std::as_const(items)) {
+		if (item->widget() != nullptr) {
+			grid->addWidget(item->widget(), row++, 0);
+			delete item;
+		} else if (item->layout() != nullptr) {
+			grid->addLayout(item->layout(), row++, 0);
+			delete item;
+		} else {
+			grid->addItem(item, row++, 0);
+		}
+	}
+}
+
+void PageWidget::tighten(QWidget *widget)
+{
+	const QList<QLayout *> layouts = widget->findChildren<QLayout *>();
+	QList<QLayout *> allLayouts(layouts);
+	if (widget->layout() != nullptr) {
+		allLayouts.prepend(widget->layout());
+	}
+
+	for (QLayout *layout : std::as_const(allLayouts)) {
+		layout->setContentsMargins(2, 2, 2, 2);
+		layout->setSpacing(2);
+	}
+
+	// Lists and tables ask for 256 px by default, way too much here
+	const QList<QAbstractScrollArea *> scrollAreas = widget->findChildren<QAbstractScrollArea *>();
+	for (QAbstractScrollArea *scrollArea : scrollAreas) {
+		if (scrollArea->maximumWidth() == QWIDGETSIZE_MAX) {
+			scrollArea->setMinimumWidth(qMin(scrollArea->minimumWidth(), 120));
+		}
+	}
+
+	// Same for editable fields, they can share the width they are given
+	const QList<QWidget *> children = widget->findChildren<QWidget *>();
+	for (QWidget *child : children) {
+		if (child->minimumWidth() > 0 || child->maximumWidth() != QWIDGETSIZE_MAX) {
+			continue;
+		}
+		if (qobject_cast<QLineEdit *>(child) != nullptr
+				|| qobject_cast<QComboBox *>(child) != nullptr
+				|| qobject_cast<QAbstractSpinBox *>(child) != nullptr) {
+			child->setMinimumWidth(48);
+			child->setSizePolicy(QSizePolicy::Ignored, child->sizePolicy().verticalPolicy());
+		}
+	}
+}
+
 void PageWidget::load(SaveData *saveData, bool pc)
 {
 	if (!builded) {
 		buildWidget();
+		if (Config::compactMode()) {
+			stackVertically(this);
+			tighten(this);
+		}
 		builded = true;
 	}
 	this->data = &saveData->mainData();

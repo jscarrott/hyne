@@ -49,9 +49,19 @@ public:
 	inline QRect saveRect(int saveID) {
 		return QRect(savePoint(saveID), saveSize());
 	}
-	inline static int saveWidth() { return 672; }
-	inline static int saveHeight() { return 106; }
-	inline static int horizontalMargin() { return 36; }
+	inline static int saveWidth() { return scaled(baseSaveWidth()); }
+	inline static int saveHeight() { return scaled(baseSaveHeight()); }
+	inline static int horizontalMargin() { return scaled(baseHorizontalMargin()); }
+	// Saves are always painted with the geometry below, then scaled down as a
+	// whole when the screen is too narrow for a full sized memory card
+	inline static QSize baseSaveSize() {
+		return QSize(baseSaveWidth(), baseSaveHeight());
+	}
+	inline static int baseSaveWidth() { return 672; }
+	inline static int baseSaveHeight() { return 106; }
+	inline static int baseHorizontalMargin() { return 36; }
+	inline static int scaled(int value) { return qRound(value * scale()); }
+	static qreal scale();
 	void updateSave(int saveID, bool withCursor=false);
 	void updateSaves(const QList<int> &saveIDs, bool withCursor=false);
 	virtual QSize sizeHint() const;
@@ -82,6 +92,10 @@ private:
 	void setDropIndicator(int saveID);
 	void setBlackSave(int saveID);
 	int saveID(const QPoint &pos) const;
+	// Save rectangle in painter coordinates, see paintEvent()
+	inline static QRect baseSaveRect(int saveID) {
+		return QRect(QPoint(0, saveID * baseSaveHeight()), baseSaveSize());
+	}
 	void restore(int saveID);
 	static void renderSave(QPainter *painter, const SaveData *saveData, const QPixmap &menuBg, const QPixmap &fontPixmap, QImage &numberPixmap, int currentIconFrame=0, const QRect &sourceRect=QRect());
 	static void colors(QImage *image, int color);

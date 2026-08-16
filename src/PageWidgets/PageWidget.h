@@ -42,6 +42,11 @@ public slots:
 	virtual void savePage() = 0;
 protected:
 	virtual void buildWidget() = 0;
+	// Stacks the top level blocks of a page vertically, so that a page
+	// designed for a 768 px wide window fits on a handheld screen
+	static void stackVertically(QWidget *widget);
+	// Trims margins and relaxes minimum widths so a page can shrink
+	static void tighten(QWidget *widget);
 	static void selectAll(QTreeWidget *, bool);
 	static void setCurrentIndex(QComboBox *comboBox, int value);
 	static QMap<int, QIcon> abilityIcons();

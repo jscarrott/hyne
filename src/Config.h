@@ -23,6 +23,12 @@
 
 #define KEYS_SIZE 13
 
+// Window size the desktop layout is designed for
+#define DESKTOP_WIDTH 768
+#define DESKTOP_HEIGHT 502
+
+class QWidget;
+
 class Config
 {
 public:
@@ -34,6 +40,11 @@ public:
 	};
 
 	static QString translationDir();
+	// True on small screens (handhelds): the UI switches to a layout that
+	// fits in 640x480. Forced with HYNE_COMPACT=1, autodetected otherwise.
+	static bool compactMode();
+	// Shrinks a window to the available screen area and centers it
+	static void fitToScreen(QWidget *widget);
 	static QString value(Key key, const QString &defaultValue=QString());
 	static QVariant valueVar(Key key, const QVariant &defaultValue=QVariant());
 	static void setValue(Key key, const QVariant &value);

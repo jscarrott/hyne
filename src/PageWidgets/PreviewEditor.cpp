@@ -28,11 +28,14 @@ void PreviewWidget::paintEvent(QPaintEvent *event)
 	if (!_saveData)	return;
 	QPainter p(this);
 
+	// renderSave() always draws with the original save geometry
 	QTransform transform;
-	transform.scale(width() * 1.0 / sizeHint().width(), height() * 1.0 / sizeHint().height());
+	transform.scale(width() * 1.0 / SavecardView::baseSaveWidth(),
+					height() * 1.0 / SavecardView::baseSaveHeight());
 	p.setTransform(transform);
 
-	SavecardView::renderSave(&p, _saveData, 0, event->rect());
+	Q_UNUSED(event)
+	SavecardView::renderSave(&p, _saveData);
 }
 
 PreviewEditor::PreviewEditor(QWidget *parent)
