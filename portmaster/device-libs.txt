@@ -5,6 +5,10 @@
 #
 # One name prefix per line. Used by build.sh when collecting the dependency
 # closure, and by tools/check-package.sh when checking what is left unresolved.
+#
+# Keep this list to what the firmwares really have. Knulli and the other
+# Batocera based ones are built with buildroot: there is no systemd there, so
+# libsystemd, which libdbus-1 pulls in, has to travel with the port.
 
 ld-linux
 linux-vdso
@@ -23,4 +27,3 @@ libGLESv2
 libgbm.so
 libdrm.so
 libudev.so
-libsystemd.so
