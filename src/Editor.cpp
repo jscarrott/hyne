@@ -39,12 +39,13 @@ Editor::Editor(QWidget *parent) :
 	const bool compact = Config::compactMode();
 
 	QFont font;
-	font.setPointSize(compact ? 7 : 9);
+	font.setPointSize(compact ? Config::compactFontSize() - 1 : 9);
 
 	liste = new QListWidget(this);
 	liste->setFont(font);
 	liste->setUniformItemSizes(true);
-	liste->setFixedWidth(compact ? 72 : 96);
+	// The page names have to stay readable when the font is turned up
+	liste->setFixedWidth(compact ? qMax(72, Config::compactFontSize() * 9) : 96);
 	liste->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	QPushButton *apply = new QPushButton(tr("&OK"), this);
