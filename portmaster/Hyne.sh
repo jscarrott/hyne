@@ -46,22 +46,22 @@ export HYNE_COMPACT=1
 [ -n "$HYNE_SCALE" ] && export QT_SCALE_FACTOR="$HYNE_SCALE"
 [ -n "$HYNE_FONT_SIZE" ] && export HYNE_FONT_SIZE
 
-# There is no X server here: paint on the framebuffer when there is one,
-# through KMS/DRM otherwise
-if [ -z "$HYNE_PLATFORM" ]; then
-  if [ -e /dev/fb0 ]; then
-    HYNE_PLATFORM="linuxfb"
-  elif [ -e /dev/dri/card0 ]; then
-    HYNE_PLATFORM="eglfs"
-  else
-    HYNE_PLATFORM="linuxfb"
-  fi
+# There is no X server here. Which of the two ways to reach the screen works
+# depends on the device, and a backend can be present and still refuse to
+# start, so the ones that could work are tried in turn rather than picked.
+if [ -n "$HYNE_PLATFORM" ]; then
+  PLATFORMS="$HYNE_PLATFORM"
+else
+  PLATFORMS=""
+  [ -e /dev/fb0 ] && PLATFORMS="linuxfb"
+  [ -e /dev/dri/card0 ] && PLATFORMS="$PLATFORMS eglfs"
+  [ -n "$PLATFORMS" ] || PLATFORMS="linuxfb eglfs"
 fi
-export QT_QPA_PLATFORM="$HYNE_PLATFORM"
+echo "Qt platforms to try: $PLATFORMS"
+
 # Only eglfs can turn the picture, the framebuffer one shows it as the
 # panel is wired
 [ -n "$HYNE_ROTATION" ] && export QT_QPA_EGLFS_ROTATION="$HYNE_ROTATION"
-echo "Using Qt platform: $QT_QPA_PLATFORM"
 
 # Read the keyboard and the mouse gptokeyb emulates straight from evdev,
 # instead of depending on the libinput of the device
@@ -102,6 +102,22 @@ pm_platform_helper "$GAMEDIR/hyne"
 # create the virtual keyboard and mouse it feeds them from
 sleep 1
 
-./hyne
+for platform in $PLATFORMS; do
+  echo "Starting with Qt platform: $platform"
+  QT_QPA_PLATFORM="$platform" ./hyne
+  status=$?
+  # 0 is a normal quit, 143 is the SIGTERM of Select+Start
+  if [ $status -eq 0 ] || [ $status -eq 143 ]; then
+    break
+  fi
+  echo "Qt platform $platform failed with status $status"
+  LAST_STATUS=$status
+done
+
+if [ -n "$LAST_STATUS" ] && [ "$LAST_STATUS" != "0" ]; then
+  echo "No Qt platform worked. Run this by hand over ssh to see why:"
+  echo "  cd $GAMEDIR && LD_LIBRARY_PATH=\$PWD/libs QT_PLUGIN_PATH=\$PWD/plugins \\"
+  echo "    QT_DEBUG_PLUGINS=1 QT_QPA_PLATFORM=linuxfb ./hyne"
+fi
 
 pm_finish
