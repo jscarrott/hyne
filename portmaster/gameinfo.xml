@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<gameList>
+	<game>
+		<path>./Hyne.sh</path>
+		<name>Hyne</name>
+		<desc>Savegame editor for Final Fantasy VIII. Opens PlayStation memory cards and PC, PS4 Remaster and Switch saves, and edits characters, GFs, magic, items, shops, Triple Triad cards and gil.</desc>
+		<image>./hyne/screenshot.jpg</image>
+		<genre>Tools</genre>
+		<developer>myst6re</developer>
+	</game>
+</gameList>

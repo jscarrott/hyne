@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "name": "hyne.zip",
+  "items": [
+    "Hyne.sh",
+    "hyne"
+  ],
+  "attr": {
+    "title": "Hyne",
+    "desc": "Hyne is a complete savegame editor for Final Fantasy VIII. It opens PlayStation memory cards, PC, PS4 Remaster and Switch saves, and lets you edit characters, GFs, magic, items, shops, Triple Triad cards, gil and most of the save header.",
+    "desc_md": null,
+    "inst": "Put your memory card next to your Final Fantasy VIII rom, or use the ones the emulators write in /userdata/saves/psx, then open it from the File menu.\n\nControls: left stick (d-pad on devices without a stick) moves the pointer, A clicks, B is Escape, X is Enter, Y is Tab, L1/R1 change editor page, L2/R2 scroll, Start opens the menu bar, Select+Start quits.\n\nRenaming characters and GFs needs a USB or Bluetooth keyboard, there is no on screen keyboard.\n\nAlways keep a backup of the save you edit.",
+    "inst_md": null,
+    "genres": [
+      "tools"
+    ],
+    "porter": [
+      "jscarrott"
+    ],
+    "thread": "",
+    "image": {
+      "screenshot": "screenshot.jpg"
+    },
+    "rtr": true,
+    "exp": false,
+    "runtime": null,
+    "reqs": [],
+    "arch": [
+      "aarch64"
+    ]
+  }
+}
