@@ -1,16 +1,15 @@
 # Hyne - devices without an analog stick
-# The d-pad moves the pointer, L3 is not available so the pointer speed is
-# lowered with L2 instead.
+#
+# The d-pad drives the interface: up and down walk through the controls,
+# left and right change the value of the focused one. There is no pointer
+# on these devices, every control is reachable this way.
 
-up = mouse_movement_up
-down = mouse_movement_down
-left = mouse_movement_left
-right = mouse_movement_right
-dpad_mouse_step = 7
-mouse_scale = 8192
-mouse_delay = 16
+up = up
+down = down
+left = left
+right = right
 
-a = mouse_left
+a = space
 b = esc
 x = enter
 y = tab
@@ -21,12 +20,9 @@ l1 = add_ctrl
 r1 = pagedown
 r1 = add_ctrl
 
-# Scroll inside a page
+# Scroll a page, jump through the memory card
+l2 = pageup
 r2 = pagedown
 
 # Opens the menu bar
 start = f10
-
-# Slower pointer for small check boxes
-l2 = mouse_slow
-mouse_slow_scale = 40

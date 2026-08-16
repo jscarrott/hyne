@@ -31,6 +31,8 @@ public:
 	void updateMode(bool mode);
 	void updateTime();
 	void showPreviousPage();
+	// Focuses the page list, the entry point for d-pad navigation
+	void setInitialFocus();
 	void showNextPage();
 private:
 	void addPage(PageWidget *page);

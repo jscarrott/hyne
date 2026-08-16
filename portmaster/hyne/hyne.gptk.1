@@ -1,22 +1,15 @@
-# Hyne - devices with at least one analog stick
-# Left stick moves the pointer, the d-pad walks through the controls.
-
-left_analog_up = mouse_movement_up
-left_analog_down = mouse_movement_down
-left_analog_left = mouse_movement_left
-left_analog_right = mouse_movement_right
-mouse_scale = 8192
-mouse_delay = 16
-deadzone_mode = scaled_radial
-deadzone = 2000
-deadzone_scale = 8
+# Hyne - devices with one analog stick
+#
+# The d-pad drives the interface: up and down walk through the controls,
+# left and right change the value of the focused one. The stick moves a
+# pointer for the few things that are quicker to click.
 
 up = up
 down = down
 left = left
 right = right
 
-a = mouse_left
+a = space
 b = esc
 x = enter
 y = tab
@@ -27,13 +20,21 @@ l1 = add_ctrl
 r1 = pagedown
 r1 = add_ctrl
 
-# Scroll inside a page
+# Scroll a page, jump through the memory card
 l2 = pageup
 r2 = pagedown
 
 # Opens the menu bar
 start = f10
 
-# Slower pointer for small check boxes
-l3 = mouse_slow
-mouse_slow_scale = 40
+# Pointer on the stick, click with the stick button
+left_analog_up = mouse_movement_up
+left_analog_down = mouse_movement_down
+left_analog_left = mouse_movement_left
+left_analog_right = mouse_movement_right
+mouse_scale = 8192
+mouse_delay = 16
+deadzone_mode = scaled_radial
+deadzone = 2000
+deadzone_scale = 8
+l3 = mouse_left

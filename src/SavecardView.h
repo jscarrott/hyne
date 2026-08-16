@@ -38,6 +38,8 @@ public:
 	void setSavecard(SavecardData *save);
 
 	void moveCursor(int saveID);
+	// Moves the cursor by offset saves and scrolls it into view
+	void moveCursorBy(int offset);
 
 	inline static QSize saveSize() {
 		return QSize(saveWidth(), saveHeight());
@@ -92,6 +94,8 @@ private:
 	void setDropIndicator(int saveID);
 	void setBlackSave(int saveID);
 	int saveID(const QPoint &pos) const;
+	// Opens a save the way a left click on it would
+	void openSave(int saveID);
 	// Save rectangle in painter coordinates, see paintEvent()
 	inline static QRect baseSaveRect(int saveID) {
 		return QRect(QPoint(0, saveID * baseSaveHeight()), baseSaveSize());
@@ -113,6 +117,7 @@ private:
 	int currentSaveIconFrame;
 protected:
 	virtual void paintEvent(QPaintEvent *event);
+	virtual void keyPressEvent(QKeyEvent *event);
 	virtual void mousePressEvent(QMouseEvent *event);
 	virtual void mouseMoveEvent(QMouseEvent *event);
 	virtual void mouseReleaseEvent(QMouseEvent *event);

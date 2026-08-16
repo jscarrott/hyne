@@ -32,6 +32,8 @@ public:
 	QAction *addAction(const QString &text);
 	QAction *addAction(const QString &text, const QObject *receiver, const char *method);
 	void setCursorPosition(int actionID);
+	// Moves the cursor to the next enabled action, direction is 1 or -1
+	void moveCursor(int direction);
 	inline virtual QSize sizeHint() const { return QSize(OPTION_WIDTH, OPTION_HEIGHT * actions().size()); }
 	inline virtual QSize minimumSizeHint() const { return sizeHint(); }
 signals:
@@ -43,6 +45,8 @@ protected:
 	virtual void mouseMoveEvent(QMouseEvent *event);
 	virtual void mouseReleaseEvent(QMouseEvent *event);
 	virtual void leaveEvent(QEvent *event);
+	virtual void keyPressEvent(QKeyEvent *event);
+	virtual void focusInEvent(QFocusEvent *event);
 private:
 	QPoint actionsPosition() const { return QPoint((width() - sizeHint().width()) / 2, (height() - sizeHint().height()) / 2); }
 	int actionID(const QPoint &pos) const;
