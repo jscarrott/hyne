@@ -19,12 +19,20 @@ jobs:
       matrix:
         qt:
           - 6.8.3
+        # Only Linux is built. The macOS and Windows entries below are kept
+        # commented out rather than deleted: their steps are still in this
+        # workflow, so uncommenting a block brings the platform back.
+        #
+        #   macos-latest    fails at link, Qt 6.8 passes -framework AGL and
+        #                   AGL is gone from the current macOS SDK
+        #   windows-*       fails in vcpkg, the msys2-runtime version the
+        #                   pinned baseline wants is 404 on every mirror
         os:
           - ubuntu-latest
           - ubuntu-24.04-arm
-          - macos-latest
-          - windows-latest
-          - windows-11-arm
+          #- macos-latest
+          #- windows-latest
+          #- windows-11-arm
         build_type:
           - Release
         include:
@@ -36,22 +44,22 @@ jobs:
         - os: ubuntu-24.04-arm
           package_extension: 'tar.xz'
           package_suffix: 'linux_arm64'
-        - os: macos-latest
-          package_extension: 'dmg'
-          package_suffix: 'macos'
-          cmake_extra_args: "-DCMAKE_OSX_ARCHITECTURES=\"arm64;x86_64\" -DVCPKG_TARGET_TRIPLET=\"universal-osx\""
-        - os: windows-latest
-          package_extension: 'zip'
-          package_suffix: 'win_x64'
-          win_arch: "x64"
-          qt_arch: win64_msvc2022_64
-          qt_tools: tools_ninja, tools_cmake
-        - os: windows-11-arm
-          package_extension: 'zip'
-          package_suffix: 'win_arm64'
-          win_arch: "arm64"
-          qt_arch: win64_msvc2022_arm64
-          qt_tools: tools_ninja, tools_cmake
+        #- os: macos-latest
+        #  package_extension: 'dmg'
+        #  package_suffix: 'macos'
+        #  cmake_extra_args: "-DCMAKE_OSX_ARCHITECTURES=\"arm64;x86_64\" -DVCPKG_TARGET_TRIPLET=\"universal-osx\""
+        #- os: windows-latest
+        #  package_extension: 'zip'
+        #  package_suffix: 'win_x64'
+        #  win_arch: "x64"
+        #  qt_arch: win64_msvc2022_64
+        #  qt_tools: tools_ninja, tools_cmake
+        #- os: windows-11-arm
+        #  package_extension: 'zip'
+        #  package_suffix: 'win_arm64'
+        #  win_arch: "arm64"
+        #  qt_arch: win64_msvc2022_arm64
+        #  qt_tools: tools_ninja, tools_cmake
 
     env:
       qt_installation_path: ${{ github.workspace }}
