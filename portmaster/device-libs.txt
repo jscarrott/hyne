@@ -1,0 +1,26 @@
+# Libraries the port never bundles: they belong to the device, either because
+# they are the C library the firmware was built with, or because they talk to
+# its kernel, GPU driver or device manager. Bundling them would either break
+# the port on hardware it was not built on, or shadow the vendor driver.
+#
+# One name prefix per line. Used by build.sh when collecting the dependency
+# closure, and by tools/check-package.sh when checking what is left unresolved.
+
+ld-linux
+linux-vdso
+libc.so
+libm.so
+libdl.so
+libpthread.so
+librt.so
+libresolv.so
+libutil.so
+libnsl.so
+libanl.so
+libEGL.so
+libGLESv1
+libGLESv2
+libgbm.so
+libdrm.so
+libudev.so
+libsystemd.so
