@@ -19,11 +19,8 @@ STAGE_DIR="$BUILD_DIR/stage"
 DIST_DIR="${DIST_DIR:-$ROOT/dist}"
 PORT_DIR="$STAGE_DIR/hyne"
 
-# Libraries that must come from the device: the C library and everything
-# tied to its kernel, GPU driver or device manager
-SYSTEM_LIBS="ld-linux linux-vdso libc.so libm.so libdl.so libpthread.so librt.so
-libresolv.so libutil.so libnsl.so libanl.so libEGL.so libGLESv1 libGLESv2
-libgbm.so libdrm.so libudev.so libsystemd.so"
+# Libraries that must come from the device, see device-libs.txt
+SYSTEM_LIBS="$(grep -v '^\s*\(#\|$\)' "$ROOT/portmaster/device-libs.txt")"
 
 is_system_lib() {
 	local name

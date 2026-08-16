@@ -207,11 +207,7 @@ jobs:
         docker run --rm --platform linux/arm64 -v "$PWD:/src" -w /src hyne-portmaster-builder
 
     - name: Check the package is self contained
-      run: |
-        mkdir -p /tmp/pmcheck && unzip -q dist/hyne.zip -d /tmp/pmcheck
-        cd /tmp/pmcheck/hyne
-        missing=$(LD_LIBRARY_PATH="$PWD/libs" ldd ./hyne plugins/platforms/*.so | grep 'not found' || true)
-        if [ -n "$missing" ]; then echo "$missing"; exit 1; fi
+      run: portmaster/tools/check-package.sh dist/hyne.zip
 
     - name: Upload
       uses: actions/upload-artifact@v4
