@@ -43,6 +43,9 @@ public:
 	// True on small screens (handhelds): the UI switches to a layout that
 	// fits in 640x480. Forced with HYNE_COMPACT=1, autodetected otherwise.
 	static bool compactMode();
+	// Interface point size in compact mode, HYNE_FONT_SIZE overrides it.
+	// A 3.5 inch 640x480 panel is dense, some eyes want a bigger default.
+	static int compactFontSize();
 	// Shrinks a window to the available screen area and centers it
 	static void fitToScreen(QWidget *widget);
 	static QString value(Key key, const QString &defaultValue=QString());

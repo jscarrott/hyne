@@ -26,7 +26,7 @@ cd "$GAMEDIR"
 
 > "$GAMEDIR/log.txt" && exec > >(tee "$GAMEDIR/log.txt") 2>&1
 
-# Optional user overrides: HYNE_PLATFORM, HYNE_SCALE, HYNE_SAVEDIR
+# Optional user overrides, see hyne.cfg
 [ -f "$GAMEDIR/hyne.cfg" ] && source "$GAMEDIR/hyne.cfg"
 
 export LD_LIBRARY_PATH="$GAMEDIR/libs:$LD_LIBRARY_PATH"
@@ -44,6 +44,7 @@ export XDG_RUNTIME_DIR="$CONFDIR"
 # Hyne's handheld layout
 export HYNE_COMPACT=1
 [ -n "$HYNE_SCALE" ] && export QT_SCALE_FACTOR="$HYNE_SCALE"
+[ -n "$HYNE_FONT_SIZE" ] && export HYNE_FONT_SIZE
 
 # There is no X server here: paint on the framebuffer when there is one,
 # through KMS/DRM otherwise
@@ -57,6 +58,9 @@ if [ -z "$HYNE_PLATFORM" ]; then
   fi
 fi
 export QT_QPA_PLATFORM="$HYNE_PLATFORM"
+# Only eglfs can turn the picture, the framebuffer one shows it as the
+# panel is wired
+[ -n "$HYNE_ROTATION" ] && export QT_QPA_EGLFS_ROTATION="$HYNE_ROTATION"
 echo "Using Qt platform: $QT_QPA_PLATFORM"
 
 # Read the keyboard and the mouse gptokeyb emulates straight from evdev,

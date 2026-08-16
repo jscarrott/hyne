@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 
 	if (Config::compactMode()) {
 		QFont font = app.font();
-		font.setPointSize(8);
+		font.setPointSize(Config::compactFontSize());
 		app.setFont(font);
 		app.setStyleSheet(QLatin1String(compactStyleSheet));
 		app.installEventFilter(new HandheldFilter(&app));

@@ -80,6 +80,19 @@ bool Config::compactMode()
 	return compact > 0;
 }
 
+int Config::compactFontSize()
+{
+	static int size = 0;
+
+	if (size == 0) {
+		bool ok = false;
+		const int wanted = qgetenv("HYNE_FONT_SIZE").toInt(&ok);
+		size = ok ? qBound(6, wanted, 14) : 8;
+	}
+
+	return size;
+}
+
 void Config::fitToScreen(QWidget *widget)
 {
 	QScreen *screen = widget->screen() != nullptr

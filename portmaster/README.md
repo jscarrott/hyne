@@ -66,12 +66,22 @@ when something goes wrong.
 ## Small screens
 
 The interface is laid out for 640x480 and most pages fit without scrolling.
-Worldmap and Miscellaneous are wider and scroll sideways. To see them whole,
-shrink the whole interface in `hyne/hyne.cfg`:
+Worldmap and Miscellaneous are wider and scroll sideways.
+
+On a 3.5 inch panel — RG35XX Pro, Plus, H and SP all pack 640x480 into
+3.5 inches — the default 8 point font is small. Turn it up in
+`hyne/hyne.cfg`:
 
 ```sh
-HYNE_SCALE=0.85
+HYNE_FONT_SIZE=10
 ```
+
+10 still fits every page that fitted before; above that the wider pages
+start scrolling sideways. The page list grows with the font so the page
+names stay readable.
+
+`HYNE_SCALE` is the opposite trade, shrinking everything to get more of the
+widest pages on screen at once.
 
 ## Building the package
 
