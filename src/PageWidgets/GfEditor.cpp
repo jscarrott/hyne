@@ -124,7 +124,9 @@ QWidget *GfEditor::buildPage1()
 	liste->setColumnHidden(0, true);
 	liste2->setColumnHidden(0, true);
 	liste->header()->setStretchLastSection(false);
-	liste2->setFixedWidth(150);
+	if (!Config::compactMode()) {
+		liste2->setFixedWidth(150);
+	}
 	liste2->resizeColumnToContents(1);
 	liste->setUniformRowHeights(true);
 	liste2->setUniformRowHeights(true);
@@ -169,10 +171,19 @@ QWidget *GfEditor::buildPage1()
 	QGridLayout *grid = new QGridLayout(ret);
 	grid->addWidget(existsE, 0, 0, 1, 4);
 	grid->addLayout(statEditL, 2, 0, 1, 4);
-	grid->addWidget(liste, 3, 0);
-	grid->addLayout(buttonC, 3, 1);
-	grid->addWidget(liste2, 3, 2);
-	grid->addWidget(restoreF, 3, 3, Qt::AlignTop);
+	if (Config::compactMode()) {
+		// Four columns of lists and buttons do not fit on a handheld screen
+		buttonC->setDirection(QBoxLayout::LeftToRight);
+		grid->addWidget(liste, 3, 0, 1, 4);
+		grid->addLayout(buttonC, 4, 0, 1, 4);
+		grid->addWidget(liste2, 5, 0, 1, 4);
+		grid->addWidget(restoreF, 6, 0, 1, 4);
+	} else {
+		grid->addWidget(liste, 3, 0);
+		grid->addLayout(buttonC, 3, 1);
+		grid->addWidget(liste2, 3, 2);
+		grid->addWidget(restoreF, 3, 3, Qt::AlignTop);
+	}
 	QMargins margins = grid->contentsMargins();
 	margins.setTop(0);
 	grid->setContentsMargins(margins);

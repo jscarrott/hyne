@@ -26,8 +26,18 @@ Window::Window(bool isNew) :
 	QWidget(), taskbarButton(nullptr), saves(nullptr), saveList(nullptr), editor(nullptr)
 {
 	setTitle();
-	setMinimumSize(768, 502);
-	resize(768, 502);
+	if (Config::compactMode()) {
+		// Handheld screens are smaller than the desktop layout, pages scroll.
+		// The window takes the whole screen, there is no window manager there.
+		setMinimumSize(320, 240);
+		QScreen *screen = QGuiApplication::primaryScreen();
+		if (screen != nullptr) {
+			setGeometry(screen->availableGeometry());
+		}
+	} else {
+		setMinimumSize(DESKTOP_WIDTH, DESKTOP_HEIGHT);
+		resize(DESKTOP_WIDTH, DESKTOP_HEIGHT);
+	}
 	setAcceptDrops(true);
 
 	menuBar = new QMenuBar(nullptr);
@@ -160,7 +170,12 @@ Window::Window(bool isNew) :
 	stackedLayout->setMenuBar(menuBar);
 	stackedLayout->addWidget(startWidget);
 
-	restoreGeometry(Config::valueVar(Config::Geometry).toByteArray());
+	if (Config::compactMode()) {
+		// Saved geometry comes from another screen size most of the time
+		setWindowState(windowState() | Qt::WindowFullScreen);
+	} else {
+		restoreGeometry(Config::valueVar(Config::Geometry).toByteArray());
+	}
 }
 
 Window::~Window()
@@ -694,6 +709,17 @@ void Window::editView(SaveData *saveData)
 		editor = new Editor(this);
 		connect(editor, SIGNAL(accepted()), SLOT(saveView()));
 		connect(editor, SIGNAL(rejected()), SLOT(saveView()));
+		// Page cycling, mapped to the shoulder buttons on handhelds
+		QAction *previousPage = new QAction(editor);
+		previousPage->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_PageUp));
+		previousPage->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+		connect(previousPage, &QAction::triggered, editor, &Editor::showPreviousPage);
+		editor->addAction(previousPage);
+		QAction *nextPage = new QAction(editor);
+		nextPage->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_PageDown));
+		nextPage->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+		connect(nextPage, &QAction::triggered, editor, &Editor::showNextPage);
+		editor->addAction(nextPage);
 		stackedLayout->addWidget(editor);
 	}
 	editor->show();

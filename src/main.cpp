@@ -22,12 +22,39 @@
 // Only for static compilation
 //Q_IMPORT_PLUGIN(qjpcodecs) // jp encoding
 
+// Keeps dialogs inside the screen on handhelds, where most of them are
+// larger than the 640x480 panel they are shown on
+class CompactDialogFilter : public QObject
+{
+public:
+	explicit CompactDialogFilter(QObject *parent = nullptr) : QObject(parent) {}
+protected:
+	bool eventFilter(QObject *watched, QEvent *event) override
+	{
+		if (event->type() == QEvent::Show) {
+			QDialog *dialog = qobject_cast<QDialog *>(watched);
+			if (dialog != nullptr && dialog->isWindow()) {
+				Config::fitToScreen(dialog);
+			}
+		}
+
+		return QObject::eventFilter(watched, event);
+	}
+};
+
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
 	app.setWindowIcon(QIcon(":/images/Hyne.png"));
 
 	Config::set();
+
+	if (Config::compactMode()) {
+		QFont font = app.font();
+		font.setPointSize(8);
+		app.setFont(font);
+		app.installEventFilter(new CompactDialogFilter(&app));
+	}
 
 	QTranslator translator_qt, translator;
 	QString lang = Config::value(Config::Lang),

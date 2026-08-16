@@ -18,6 +18,10 @@
 
 #include "Config.h"
 
+#include <QGuiApplication>
+#include <QScreen>
+#include <QWidget>
+
 const char *Config::keys[KEYS_SIZE] = {
 	"recentFiles", "lang", "geometry",
 	"font", "freq", "freq_auto", "mode", "lastCountry", "lastGameCode", "selectedFF8Installation",
@@ -54,6 +58,42 @@ QString Config::translationDir()
 		}
 	}
 	return translationDir.absolutePath();
+}
+
+bool Config::compactMode()
+{
+	static int compact = -1;
+
+	if (compact < 0) {
+		const QByteArray forced = qgetenv("HYNE_COMPACT");
+
+		if (!forced.isEmpty()) {
+			compact = forced != "0" ? 1 : 0;
+		} else {
+			QScreen *screen = QGuiApplication::primaryScreen();
+			QSize size = screen != nullptr ? screen->availableGeometry().size() : QSize();
+			compact = size.isValid()
+					&& (size.width() < DESKTOP_WIDTH || size.height() < DESKTOP_HEIGHT);
+		}
+	}
+
+	return compact > 0;
+}
+
+void Config::fitToScreen(QWidget *widget)
+{
+	QScreen *screen = widget->screen() != nullptr
+			? widget->screen() : QGuiApplication::primaryScreen();
+	if (screen == nullptr) {
+		return;
+	}
+
+	const QRect available = screen->availableGeometry();
+	const QSize size = widget->sizeHint().boundedTo(available.size());
+
+	widget->setMaximumSize(available.size());
+	widget->resize(size);
+	widget->move(available.center() - QPoint(size.width() / 2, size.height() / 2));
 }
 
 quint32 Config::sec(quint32 time, int freq_value)

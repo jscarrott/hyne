@@ -139,7 +139,8 @@ void SavecardView::moveCursor(int saveID)
 		maxID = minID;
 	}
 
-	update(QRect(savePoint(minID) + QPoint(-36, 16), QSize(48, (maxID - minID)*saveHeight() + 46)));
+	update(QRect(savePoint(minID) + QPoint(scaled(-36), scaled(16)),
+				 QSize(scaled(48), (maxID - minID) * saveHeight() + scaled(46))));
 }
 
 void SavecardView::setDropIndicator(int saveID)
@@ -412,6 +413,29 @@ void SavecardView::restore(int saveID)
 	}
 }
 
+qreal SavecardView::scale()
+{
+	static qreal scale = 0.0;
+
+	if (scale <= 0.0) {
+		scale = 1.0;
+
+		QScreen *screen = QGuiApplication::primaryScreen();
+		if (Config::compactMode() && screen != nullptr) {
+			// Keep room for the vertical scrollbar of the parent scroll area
+			const int available = screen->availableGeometry().width()
+					- QApplication::style()->pixelMetric(QStyle::PM_ScrollBarExtent) - 8;
+			const int wanted = baseSaveWidth() + baseHorizontalMargin() * 2;
+
+			if (available > 0 && available < wanted) {
+				scale = available / qreal(wanted);
+			}
+		}
+	}
+
+	return scale;
+}
+
 int SavecardView::saveID(const QPoint &pos) const
 {
 	if (pos.x() < 0
@@ -437,7 +461,8 @@ QSize SavecardView::minimumSizeHint() const
 void SavecardView::refreshIcon(SaveData *saveData)
 {
 	if (!saveData->isDelete()) {
-		repaint(QRect(savePoint(saveData->id()) + QPoint(36, 43), QSize(16, 16)));
+		repaint(QRect(savePoint(saveData->id()) + QPoint(scaled(36), scaled(43)),
+					  QSize(scaled(16), scaled(16))));
 	}
 }
 
@@ -470,7 +495,7 @@ void SavecardView::renderSave(QPainter *painter, const SaveData *saveData, const
 {
 	QRect toBePainted;
 	if (sourceRect.isNull()) {
-		toBePainted = QRect(QPoint(0, 0), saveSize());
+		toBePainted = QRect(QPoint(0, 0), baseSaveSize());
 	} else {
 		toBePainted = sourceRect;
 	}
@@ -479,7 +504,7 @@ void SavecardView::renderSave(QPainter *painter, const SaveData *saveData, const
 
 	// Background
 	painter->setBrush(QBrush(menuBg));
-	drawFrame(painter, saveWidth(), saveHeight());
+	drawFrame(painter, baseSaveWidth(), baseSaveHeight());
 
 	// Save Number (Frame title)
 	if (!(toBePainted & QRect(4, 0, 36, 22)).isEmpty()) {
@@ -502,26 +527,26 @@ void SavecardView::renderSave(QPainter *painter, const SaveData *saveData, const
 			painter->drawPixmap(180, 4, QPixmap(QString(":/images/icons/perso%1.png").arg(saveData->constDescData().party[2] & 15)));
 
 		// Main char name
-		if (!(toBePainted & QRect(271, 8, saveWidth()-271, 24)).isEmpty()) {
+		if (!(toBePainted & QRect(271, 8, baseSaveWidth()-271, 24)).isEmpty()) {
 			int persoIndex = saveData->constDescData().party[0] != 255 ? saveData->constDescData().party[0] : (saveData->constDescData().party[1] != 255 ? saveData->constDescData().party[1] : saveData->constDescData().party[2]);
 			bool langIndep = persoIndex==SQUALL || persoIndex==RINOA || persoIndex==GRIEVER || persoIndex==BOKO || persoIndex==ANGELO;
 			FF8Text::drawTextArea(painter, QPoint(271, 8), saveData->perso(persoIndex), langIndep ? (saveData->isJp() ? 2 : 1) : 0);
 		}
 
 		// Level
-		if (!(toBePainted & QRect(271, 36, saveWidth()-271, 24)).isEmpty()) {
+		if (!(toBePainted & QRect(271, 36, baseSaveWidth()-271, 24)).isEmpty()) {
 			FF8Text::drawTextArea(painter, QPoint(271, 36), tr("LV%1").arg(saveData->constDescData().nivLeader,3,10,QChar(' ')), 1);
 		}
 
 		// Disc number
-		if (!(toBePainted & QRect(391, 38, saveWidth()-391, 16)).isEmpty()) {
+		if (!(toBePainted & QRect(391, 38, baseSaveWidth()-391, 16)).isEmpty()) {
 			QPixmap disc(QString(":/images/disc_%1.png").arg(Config::value(Config::Lang)=="fr" ? "fr" : "en"));
 			painter->drawPixmap(391, 38, disc);
 			num2pix(painter, &numberPixmap, 395+disc.width(), 38, saveData->constDescData().disc+1);
 		}
 
 		// Play time
-		if (!(toBePainted & QRect(511, 16, saveWidth()-511, 16)).isEmpty()) {
+		if (!(toBePainted & QRect(511, 16, baseSaveWidth()-511, 16)).isEmpty()) {
 			painter->drawPixmap(511, 16, QPixmap(QString(":/images/play_%1.png").arg(Config::value(Config::Lang)=="fr" ? "fr" : "en")));
 
 			int hour = Config::hour(saveData->constDescData().time, saveData->freqValue());
@@ -535,7 +560,7 @@ void SavecardView::renderSave(QPainter *painter, const SaveData *saveData, const
 		}
 
 		// Gils
-		if (!(toBePainted & QRect(511, 40, saveWidth()-511, 16)).isEmpty()) {
+		if (!(toBePainted & QRect(511, 40, baseSaveWidth()-511, 16)).isEmpty()) {
 			num2pix(painter, &numberPixmap, 511, 40, saveData->constDescData().gils, 8);
 			painter->drawPixmap(640, 44, QPixmap(":/images/gils.png"));
 		}
@@ -547,14 +572,14 @@ void SavecardView::renderSave(QPainter *painter, const SaveData *saveData, const
 			drawFrame(painter, 416, 44);
 
 			// Location
-			if (!(toBePainted & QRect(256+12, 62+12, saveWidth()-(256+12), 24)).isEmpty()) {
+			if (!(toBePainted & QRect(256+12, 62+12, baseSaveWidth()-(256+12), 24)).isEmpty()) {
 				FF8Text::drawTextArea(painter, QPoint(12, 12), saveData->constDescData().locationID<251 ? Data::locations().at(saveData->constDescData().locationID) : QString("??? (%1)").arg(saveData->constDescData().locationID));
 			}
 		}
 	}
 	else
 	{
-		if (!(toBePainted & QRect(36, 43, saveWidth()-36, 24)).isEmpty()) {
+		if (!(toBePainted & QRect(36, 43, baseSaveWidth()-36, 24)).isEmpty()) {
 			if (saveData->isRaw())
 			{
 				// Unavailable block
@@ -595,7 +620,18 @@ void SavecardView::paintEvent(QPaintEvent *event)
 	painter.fillRect(event->rect(), palette().color(QPalette::Window));
 
 	if (_data) {
-		painter.translate(horizontalMargin(), 0);
+		// Everything below is painted with the original geometry, the painter
+		// scales it down as a whole when the screen is too narrow (compact mode)
+		const qreal s = scale();
+		const QRectF exposed(event->rect());
+		// Exposed area in save coordinates, relative to the first save top left
+		const QRect baseRect = QRectF(exposed.x() / s, exposed.y() / s,
+									  exposed.width() / s, exposed.height() / s)
+				.adjusted(-1, -1, 1, 1).toRect()
+				.translated(-baseHorizontalMargin(), 0);
+
+		painter.scale(s, s);
+		painter.translate(baseHorizontalMargin(), 0);
 
 		int curSaveID, minSaveID, maxSaveID;
 		minSaveID = saveID(event->rect().topLeft());
@@ -608,15 +644,15 @@ void SavecardView::paintEvent(QPaintEvent *event)
 
 		// Translate painter to the first save to be drawn
 		if (minSaveID > 0) {
-			painter.translate(0, minSaveID * saveHeight());
+			painter.translate(0, minSaveID * baseSaveHeight());
 		}
 
 		for (curSaveID = minSaveID; curSaveID <= maxSaveID && curSaveID < _data->saveCount(); ++curSaveID) {
 			if (blackID != curSaveID) {
 				SaveData *saveData = _data->getSaves().at(curSaveID);
 
-				QRect sourceRect = (event->rect() & saveRect(curSaveID));
-				sourceRect.moveTopLeft(sourceRect.topLeft() - savePoint(curSaveID));
+				QRect sourceRect = (baseRect & baseSaveRect(curSaveID));
+				sourceRect.moveTopLeft(sourceRect.topLeft() - baseSaveRect(curSaveID).topLeft());
 
 				// Paint save
 				renderSave(&painter, saveData,
@@ -637,22 +673,22 @@ void SavecardView::paintEvent(QPaintEvent *event)
 					QPen pen(Qt::white, 3);
 					painter.setPen(pen);
 					painter.setBrush(QBrush());
-					painter.drawRect(0, 2, saveWidth(), saveHeight()-4);
+					painter.drawRect(0, 2, baseSaveWidth(), baseSaveHeight()-4);
 				} else { // Insert
 					QPen pen(Qt::white, 8);
 					painter.setPen(pen);
-					painter.drawLine(0, 0, saveWidth(), 0);
+					painter.drawLine(0, 0, baseSaveWidth(), 0);
 				}
 			}
 
-			painter.translate(0, saveHeight());
+			painter.translate(0, baseSaveHeight());
 		}
 		// Insert indicator after the last item
 		if (dropIndicatorID >= curSaveID && curSaveID == _data->saveCount()) {
 			if (!isExternalDrag) {
 				QPen pen(Qt::white, 8);
 				painter.setPen(pen);
-				painter.drawLine(0, 0, saveWidth(), 0);
+				painter.drawLine(0, 0, baseSaveWidth(), 0);
 			}
 		}
 	}

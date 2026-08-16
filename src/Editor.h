@@ -20,6 +20,7 @@
 
 #include <QtWidgets>
 #include "SaveData.h"
+#include "PageWidgets/PageWidget.h"
 
 class Editor : public QWidget
 {
@@ -29,8 +30,12 @@ public:
 	void load(SaveData *saveData, bool pc);
 	void updateMode(bool mode);
 	void updateTime();
+	void showPreviousPage();
+	void showNextPage();
 private:
+	void addPage(PageWidget *page);
 	QStackedLayout *stackedLayout;
+	QList<PageWidget *> pages;
 	QListWidget *liste;
 	SaveData *saveData;
 	SaveData saveDataCopy;
