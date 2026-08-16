@@ -22,6 +22,9 @@ StartWidget::StartWidget(QWidget *parent) :
 	QWidget(parent), _cursorPosition(-1)
 {
 	setMouseTracking(true);
+	// The start screen is the first thing shown, it has to be usable with
+	// the d-pad alone
+	setFocusPolicy(Qt::StrongFocus);
 }
 
 void StartWidget::addAction(QAction *action)
@@ -129,5 +132,68 @@ void StartWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void StartWidget::leaveEvent(QEvent *)
 {
-	setCursorPosition(-1);
+	if (!hasFocus()) {
+		setCursorPosition(-1);
+	}
+}
+
+void StartWidget::moveCursor(int direction)
+{
+	const QList<QAction *> actionList = actions();
+
+	if (actionList.isEmpty()) {
+		return;
+	}
+
+	int position = _cursorPosition;
+
+	for (int i = 0; i < actionList.size(); ++i) {
+		position = position < 0
+				? (direction > 0 ? 0 : actionList.size() - 1)
+				: (position + direction + actionList.size()) % actionList.size();
+
+		if (actionList.at(position)->isEnabled()) {
+			setCursorPosition(position);
+			return;
+		}
+	}
+}
+
+void StartWidget::keyPressEvent(QKeyEvent *event)
+{
+	const QList<QAction *> actionList = actions();
+
+	switch (event->key()) {
+	case Qt::Key_Up:
+		moveCursor(-1);
+		return;
+	case Qt::Key_Down:
+		moveCursor(1);
+		return;
+	case Qt::Key_Return:
+	case Qt::Key_Enter:
+	case Qt::Key_Space:
+		if (_cursorPosition < 0) {
+			moveCursor(1);
+			return;
+		}
+		if (_cursorPosition < actionList.size()) {
+			QAction *act = actionList.at(_cursorPosition);
+			if (act->isEnabled()) {
+				act->trigger();
+				emit actionTriggered(act);
+			}
+		}
+		return;
+	default:
+		QWidget::keyPressEvent(event);
+	}
+}
+
+void StartWidget::focusInEvent(QFocusEvent *event)
+{
+	if (_cursorPosition < 0) {
+		moveCursor(1);
+	}
+	QWidget::focusInEvent(event);
 }

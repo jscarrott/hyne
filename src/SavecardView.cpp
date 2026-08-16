@@ -32,6 +32,7 @@ SavecardView::SavecardView(SavecardWidget *parent) :
 	connect(&SaveIcon::timer, SIGNAL(timeout()), SLOT(nextIcon()));
 	setMouseTracking(true);
 	setAcceptDrops(true);
+	setFocusPolicy(Qt::StrongFocus);
 }
 
 SavecardView::~SavecardView()
@@ -64,6 +65,81 @@ void SavecardView::setSavecard(SavecardData *save)
 		if (!SaveIcon::timer.isActive()) {
 			SaveIcon::timer.start();
 		}
+	}
+}
+
+void SavecardView::moveCursorBy(int offset)
+{
+	if (!_data || _data->saveCount() == 0) {
+		return;
+	}
+
+	const int saveID = qBound(0, (cursorID < 0 ? 0 : cursorID + offset), _data->saveCount() - 1);
+
+	moveCursor(saveID);
+
+	if (_parent != nullptr) {
+		const QPoint point = savePoint(saveID);
+		_parent->ensureVisible(point.x(), point.y() + saveHeight() / 2, 0, saveHeight());
+	}
+}
+
+void SavecardView::openSave(int saveID)
+{
+	SaveData *saveData = _data != nullptr ? _data->getSave(saveID) : nullptr;
+
+	if (saveData == nullptr) {
+		return;
+	}
+
+	if (saveData->isFF8()) {
+		if (saveData->isDelete()) {
+			restore(saveData->id());
+		} else {
+			edit(saveData->id());
+		}
+	} else if (!saveData->isDelete() && !saveData->isRaw()) {
+		properties(saveData->id());
+	}
+}
+
+void SavecardView::keyPressEvent(QKeyEvent *event)
+{
+	if (!_data) {
+		QWidget::keyPressEvent(event);
+		return;
+	}
+
+	switch (event->key()) {
+	case Qt::Key_Up:
+		moveCursorBy(-1);
+		return;
+	case Qt::Key_Down:
+		moveCursorBy(1);
+		return;
+	case Qt::Key_PageUp:
+		moveCursorBy(-4);
+		return;
+	case Qt::Key_PageDown:
+		moveCursorBy(4);
+		return;
+	case Qt::Key_Home:
+		moveCursorBy(-_data->saveCount());
+		return;
+	case Qt::Key_End:
+		moveCursorBy(_data->saveCount());
+		return;
+	case Qt::Key_Return:
+	case Qt::Key_Enter:
+	case Qt::Key_Space:
+		if (cursorID < 0) {
+			moveCursorBy(0);
+			return;
+		}
+		openSave(cursorID);
+		return;
+	default:
+		QWidget::keyPressEvent(event);
 	}
 }
 

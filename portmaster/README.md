@@ -25,19 +25,25 @@ The Open dialog starts in the first of those directories that exists. Set
 
 ## Controls
 
+The interface is driven with the d-pad: it walks through the controls and
+changes their values, so nothing needs the pointer.
+
 | Button | Action |
 | --- | --- |
-| Left stick | Move the pointer (d-pad on devices without a stick) |
-| D-pad | Move between controls |
-| A | Click |
-| B | Escape / close a dialog |
-| X | Enter / validate |
-| Y | Tab to the next control |
+| D-pad up / down | Move to the previous / next control |
+| D-pad left / right | Change the focused value, move inside a list |
+| A | Activate: press a button, tick a box, open a save |
+| B | Escape, close a dialog |
+| X | Confirm a dialog, commit a field |
+| Y | Jump to the next control (out of a list) |
 | L1 / R1 | Previous / next editor page |
-| L2 / R2 | Scroll the page |
-| L3 | Slow the pointer down |
+| L2 / R2 | Scroll a page, jump through the memory card |
 | Start | Open the menu bar |
 | Select + Start | Quit |
+| Left stick | Move the pointer, L3 clicks (devices with a stick) |
+| Right stick | Scroll (devices with two sticks) |
+
+The focused control is outlined, that outline is where the d-pad acts.
 
 Renaming characters, GFs or Griever needs a USB or Bluetooth keyboard: this
 port ships no on screen keyboard. Everything else — stats, magic, items,

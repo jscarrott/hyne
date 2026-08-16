@@ -131,6 +131,11 @@ void Editor::addPage(PageWidget *page)
 	}
 }
 
+void Editor::setInitialFocus()
+{
+	liste->setFocus();
+}
+
 void Editor::showPreviousPage()
 {
 	int row = liste->currentRow();

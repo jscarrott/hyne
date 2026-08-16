@@ -169,6 +169,7 @@ Window::Window(bool isNew) :
 	stackedLayout = new QStackedLayout(this);
 	stackedLayout->setMenuBar(menuBar);
 	stackedLayout->addWidget(startWidget);
+	startWidget->setFocus();
 
 	if (Config::compactMode()) {
 		// Saved geometry comes from another screen size most of the time
@@ -412,6 +413,8 @@ void Window::setIsOpen(bool open)
 {
 	if (open) {
 		stackedLayout->setCurrentWidget(saveList);
+		saveList->view()->setFocus();
+		saveList->view()->moveCursorBy(0);
 		actionSaveAs->setEnabled(true);
 		actionProperties->setEnabled(true);
 		actionClose->setEnabled(true);
@@ -420,6 +423,7 @@ void Window::setIsOpen(bool open)
 		setTitle();
 	} else {
 		stackedLayout->setCurrentWidget(startWidget);
+		startWidget->setFocus();
 		if (editor)	editor->hide();
 
 		if (saves)
@@ -725,6 +729,7 @@ void Window::editView(SaveData *saveData)
 	editor->show();
 	editor->load(saveData, saves->type() == SavecardData::Pc || saves->type() == SavecardData::PcSlot);
 	stackedLayout->setCurrentWidget(editor);
+	editor->setInitialFocus();
 	setTitle(saveData->id());
 	saves->setIsTheLastEdited(saveData->id());
 	if (taskbarButton)	taskbarButton->setOverlayIcon(saveData->saveIcon().icon().toImage());
@@ -741,6 +746,7 @@ void Window::saveView()
 		stackedLayout->addWidget(saveList);
 	} else {
 		stackedLayout->setCurrentWidget(saveList);
+		saveList->view()->setFocus();
 		if (editor)	editor->hide();
 		menuBar->show();
 		menuBar->setEnabled(true);
