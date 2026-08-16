@@ -87,8 +87,16 @@ fi
 
 chmod +x "$GAMEDIR/hyne"
 
-$GPTOKEYB "hyne" -k "hyne" -c "$GAMEDIR/hyne.gptk.$ANALOGSTICKS" &
+# gptokeyb reports one gptk per stick count, fall back to the one stick map
+GPTK="$GAMEDIR/hyne.gptk.${ANALOGSTICKS:-1}"
+[ -f "$GPTK" ] || GPTK="$GAMEDIR/hyne.gptk.1"
+
+$GPTOKEYB "hyne" -c "$GPTK" &
 pm_platform_helper "$GAMEDIR/hyne"
+
+# Qt lists the input devices once at startup, give gptokeyb the time to
+# create the virtual keyboard and mouse it feeds them from
+sleep 1
 
 ./hyne
 

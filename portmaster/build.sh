@@ -105,8 +105,9 @@ cat > "$PORT_DIR/fonts/fonts.conf" <<'EOF'
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
-	<dir prefix="default">.</dir>
-	<cachedir prefix="xdg">fontconfig</cachedir>
+	<!-- Hyne.sh runs the binary from the port directory -->
+	<dir prefix="cwd">fonts</dir>
+	<cachedir prefix="cwd">conf/fontconfig</cachedir>
 	<match target="pattern">
 		<edit name="family" mode="prepend"><string>DejaVu Sans</string></edit>
 	</match>
