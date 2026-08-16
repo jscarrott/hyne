@@ -193,6 +193,32 @@ jobs:
         name: artifact-${{ matrix.package_suffix }}
         path: ${{ github.workspace }}/hyne-continuous-*.*
 
+  portmaster_build:
+    name: portmaster_aarch64
+    runs-on: ubuntu-24.04-arm
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Build the PortMaster package
+      run: |
+        docker build --platform linux/arm64 -t hyne-portmaster-builder -f portmaster/Dockerfile portmaster
+        docker run --rm --platform linux/arm64 -v "$PWD:/src" -w /src hyne-portmaster-builder
+
+    - name: Check the package is self contained
+      run: |
+        mkdir -p /tmp/pmcheck && unzip -q dist/hyne.zip -d /tmp/pmcheck
+        cd /tmp/pmcheck/hyne
+        missing=$(LD_LIBRARY_PATH="$PWD/libs" ldd ./hyne plugins/platforms/*.so | grep 'not found' || true)
+        if [ -n "$missing" ]; then echo "$missing"; exit 1; fi
+
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: artifact-portmaster
+        path: dist/hyne.zip
+
   deb_builder:
     name: debianBuilder-${{matrix.config.name}}-${{matrix.config.arch}}
     runs-on: ${{matrix.config.os}}
@@ -253,7 +279,7 @@ jobs:
 
   pre_release_assets:
     name: Pre-Release
-    needs: [main_build, deb_builder]
+    needs: [main_build, deb_builder, portmaster_build]
     if: (github.event.ref_type != 'tag') && (github.ref == 'refs/heads/master')
     concurrency: pre-release-${{ github.ref }}
     runs-on: ubuntu-latest
@@ -274,7 +300,7 @@ jobs:
 
   release_assets:
     name: Release
-    needs: [main_build, deb_builder]
+    needs: [main_build, deb_builder, portmaster_build]
     if: github.event.ref_type == 'tag'
     concurrency: release-${{ github.ref }}
     runs-on: ubuntu-latest

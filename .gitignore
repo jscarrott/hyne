@@ -451,3 +451,7 @@ compile_commands.json
 # Custom
 .build
 .install
+
+# Hyne PortMaster package
+.build-portmaster/
+dist/

@@ -6,6 +6,13 @@
 
 Hyne is a complete savegame editor for Final Fantasy VIII.
 
+## Handhelds (Knulli / PortMaster)
+
+Hyne runs on Knulli and the other aarch64 handheld firmwares as a PortMaster
+port: see [portmaster/README.md](portmaster/README.md) for the controls, the
+save locations and how to build `dist/hyne.zip`. The layout it uses on those
+640x480 screens can be tried on a desktop with `HYNE_COMPACT=1`.
+
 ## Building
 
 If you are a developer and you want to build this software, follow the
