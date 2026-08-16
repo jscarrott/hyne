@@ -455,3 +455,7 @@ compile_commands.json
 # Hyne PortMaster package
 .build-portmaster/
 dist/
+
+# The build writes translations/Hyne_<lang>.ts next to the tracked
+# translations/hyne_<lang>.ts, which are distinct files on Linux
+/translations/Hyne_*.ts
