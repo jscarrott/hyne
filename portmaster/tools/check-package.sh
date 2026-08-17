@@ -37,6 +37,7 @@ while read -r file; do
 	while read -r needed; do
 		[ -n "$needed" ] || continue
 		[ -f "$PORT_DIR/libs/$needed" ] && continue
+		[ -f "$PORT_DIR/libs.fallback/$needed" ] && continue
 		# Provided by the device
 		printf '%s' "$needed" | grep -qE "^($device_pattern)" && continue
 		missing="$missing$needed (needed by ${file#"$PORT_DIR/"})"$'\n'
