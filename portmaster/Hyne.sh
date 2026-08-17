@@ -33,16 +33,28 @@ cd "$GAMEDIR"
 
 export LD_LIBRARY_PATH="$GAMEDIR/libs:$LD_LIBRARY_PATH"
 
-# The display plugins need libudev. It normally belongs to the device, but
-# not every firmware ships one, and without it they fail to load with no
-# explanation at all.
-if [ -e /usr/lib/libudev.so.1 ] || [ -e /lib/libudev.so.1 ] \
-   || ldconfig -p 2>/dev/null | grep -q "libudev.so.1"; then
-  echo "libudev: using the one on the device"
-else
-  echo "libudev: none on the device, using the bundled one"
-  export LD_LIBRARY_PATH="$GAMEDIR/libs.fallback:$LD_LIBRARY_PATH"
-fi
+# The display plugins link libraries that belong to the device: libudev, and
+# libdrm and libgbm for the KMS parts. A firmware can be missing them and
+# still be perfectly able to show the interface, the H700 handhelds have no
+# DRM at all yet a working framebuffer, and Qt's framebuffer plugin links
+# libdrm regardless. Anything the device does not have is taken from the
+# fallback directory, one library at a time, so a device's own copy always
+# wins.
+MISSINGDIR="$CONFDIR/libs.missing"
+rm -rf "$MISSINGDIR"
+mkdir -p "$MISSINGDIR"
+for name in libudev.so.1 libdrm.so.2 libgbm.so.1; do
+  if [ -e "/lib/$name" ] || [ -e "/usr/lib/$name" ] \
+     || ldconfig -p 2>/dev/null | grep -q "$name"; then
+    echo "$name: on the device"
+  elif [ -f "$GAMEDIR/libs.fallback/$name" ]; then
+    ln -sf "$GAMEDIR/libs.fallback/$name" "$MISSINGDIR/$name"
+    echo "$name: missing from the device, using the bundled one"
+  else
+    echo "$name: missing from the device and not bundled"
+  fi
+done
+export LD_LIBRARY_PATH="$MISSINGDIR:$LD_LIBRARY_PATH"
 export QT_PLUGIN_PATH="$GAMEDIR/plugins"
 export FONTCONFIG_FILE="$GAMEDIR/fonts/fonts.conf"
 export QT_QPA_FONTDIR="$GAMEDIR/fonts"
@@ -137,9 +149,11 @@ if [ -n "$LAST_STATUS" ] && [ "$LAST_STATUS" != "0" ]; then
   echo "--- what the device provides:"
   ls -l /usr/lib/libudev.so.1 /lib/libudev.so.1 /usr/lib/libgbm.so.1 \
         /usr/lib/libdrm.so.2 /dev/fb0 /dev/dri/card0 2>&1 | sed 's/^/    /'
-  echo "--- Qt plugin loader:"
-  QT_DEBUG_PLUGINS=1 QT_QPA_PLATFORM="${PLATFORMS%% *}" ./hyne 2>&1 \
-    | grep -iE "cannot load|not found|failed|no such" | head -20
+  for platform in $PLATFORMS; do
+    echo "--- Qt plugin loader, $platform:"
+    QT_DEBUG_PLUGINS=1 QT_QPA_PLATFORM="$platform" ./hyne 2>&1 \
+      | grep -iE "cannot load|not found|failed|no such" | head -10
+  done
   echo "=== end ==="
 fi
 
