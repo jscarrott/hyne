@@ -22,6 +22,8 @@ GAMEDIR=/$directory/ports/hyne
 CONFDIR="$GAMEDIR/conf"
 
 mkdir -p "$CONFDIR"
+# Qt complains about a world writable XDG_RUNTIME_DIR
+chmod 700 "$CONFDIR" 2>/dev/null
 cd "$GAMEDIR"
 
 > "$GAMEDIR/log.txt" && exec > >(tee "$GAMEDIR/log.txt") 2>&1
@@ -30,6 +32,17 @@ cd "$GAMEDIR"
 [ -f "$GAMEDIR/hyne.cfg" ] && source "$GAMEDIR/hyne.cfg"
 
 export LD_LIBRARY_PATH="$GAMEDIR/libs:$LD_LIBRARY_PATH"
+
+# The display plugins need libudev. It normally belongs to the device, but
+# not every firmware ships one, and without it they fail to load with no
+# explanation at all.
+if [ -e /usr/lib/libudev.so.1 ] || [ -e /lib/libudev.so.1 ] \
+   || ldconfig -p 2>/dev/null | grep -q "libudev.so.1"; then
+  echo "libudev: using the one on the device"
+else
+  echo "libudev: none on the device, using the bundled one"
+  export LD_LIBRARY_PATH="$GAMEDIR/libs.fallback:$LD_LIBRARY_PATH"
+fi
 export QT_PLUGIN_PATH="$GAMEDIR/plugins"
 export FONTCONFIG_FILE="$GAMEDIR/fonts/fonts.conf"
 export QT_QPA_FONTDIR="$GAMEDIR/fonts"
@@ -115,9 +128,19 @@ for platform in $PLATFORMS; do
 done
 
 if [ -n "$LAST_STATUS" ] && [ "$LAST_STATUS" != "0" ]; then
-  echo "No Qt platform worked. Run this by hand over ssh to see why:"
-  echo "  cd $GAMEDIR && LD_LIBRARY_PATH=\$PWD/libs QT_PLUGIN_PATH=\$PWD/plugins \\"
-  echo "    QT_DEBUG_PLUGINS=1 QT_QPA_PLATFORM=linuxfb ./hyne"
+  echo
+  echo "=== No Qt platform worked, here is why ==="
+  echo "--- libraries the plugins cannot find:"
+  ldd plugins/platforms/libqlinuxfb.so \
+      plugins/egldeviceintegrations/libqeglfs-kms-integration.so 2>/dev/null \
+    | grep "not found" | sort -u
+  echo "--- what the device provides:"
+  ls -l /usr/lib/libudev.so.1 /lib/libudev.so.1 /usr/lib/libgbm.so.1 \
+        /usr/lib/libdrm.so.2 /dev/fb0 /dev/dri/card0 2>&1 | sed 's/^/    /'
+  echo "--- Qt plugin loader:"
+  QT_DEBUG_PLUGINS=1 QT_QPA_PLATFORM="${PLATFORMS%% *}" ./hyne 2>&1 \
+    | grep -iE "cannot load|not found|failed|no such" | head -20
+  echo "=== end ==="
 fi
 
 pm_finish

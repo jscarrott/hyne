@@ -94,6 +94,18 @@ while :; do
 done
 echo "    $(find "$PORT_DIR/libs" -name '*.so*' | wc -l) libraries bundled"
 
+# libudev belongs to the device, but not every firmware has one, and both the
+# framebuffer plugin and the KMS integration need it. It travels in its own
+# directory, which the launcher only uses when the device has none.
+echo "==> Fallback libraries"
+mkdir -p "$PORT_DIR/libs.fallback"
+for lib in $(ldconfig -p | sed -n 's/.*libudev\.so\.1 (libc6[^)]*) => \(.*\)/\1/p' | head -1); do
+	cp -L "$lib" "$PORT_DIR/libs.fallback/"
+done
+if [ ! -f "$PORT_DIR/libs.fallback/libudev.so.1" ]; then
+	echo "    warning: no libudev.so.1 found to use as a fallback"
+fi
+
 echo "==> Fonts"
 for font in DejaVuSans.ttf DejaVuSans-Bold.ttf; do
 	find /usr/share/fonts -name "$font" -exec cp {} "$PORT_DIR/fonts/" \; -quit
