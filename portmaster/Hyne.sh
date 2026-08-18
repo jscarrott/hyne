@@ -22,8 +22,6 @@ GAMEDIR=/$directory/ports/hyne
 CONFDIR="$GAMEDIR/conf"
 
 mkdir -p "$CONFDIR"
-# Qt complains about a world writable XDG_RUNTIME_DIR
-chmod 700 "$CONFDIR" 2>/dev/null
 cd "$GAMEDIR"
 
 > "$GAMEDIR/log.txt" && exec > >(tee "$GAMEDIR/log.txt") 2>&1
@@ -40,7 +38,10 @@ export LD_LIBRARY_PATH="$GAMEDIR/libs:$LD_LIBRARY_PATH"
 # libdrm regardless. Anything the device does not have is taken from the
 # fallback directory, one library at a time, so a device's own copy always
 # wins.
-MISSINGDIR="$CONFDIR/libs.missing"
+# The ports directory is on the card, which is usually FAT: no symlinks, no
+# permission bits. Anything that needs either has to live somewhere else,
+# and /tmp is a real filesystem on these firmwares.
+MISSINGDIR="/tmp/hyne-libs"
 rm -rf "$MISSINGDIR"
 mkdir -p "$MISSINGDIR"
 for name in libudev.so.1 libdrm.so.2 libgbm.so.1; do
@@ -48,8 +49,12 @@ for name in libudev.so.1 libdrm.so.2 libgbm.so.1; do
      || ldconfig -p 2>/dev/null | grep -q "$name"; then
     echo "$name: on the device"
   elif [ -f "$GAMEDIR/libs.fallback/$name" ]; then
-    ln -sf "$GAMEDIR/libs.fallback/$name" "$MISSINGDIR/$name"
-    echo "$name: missing from the device, using the bundled one"
+    cp -f "$GAMEDIR/libs.fallback/$name" "$MISSINGDIR/$name"
+    if [ -f "$MISSINGDIR/$name" ]; then
+      echo "$name: missing from the device, using the bundled one"
+    else
+      echo "$name: missing from the device, and copying the bundled one failed"
+    fi
   else
     echo "$name: missing from the device and not bundled"
   fi
@@ -64,7 +69,9 @@ export HOME="$CONFDIR"
 export XDG_CONFIG_HOME="$CONFDIR"
 export XDG_DATA_HOME="$CONFDIR"
 export XDG_CACHE_HOME="$CONFDIR"
-export XDG_RUNTIME_DIR="$CONFDIR"
+# Qt wants this one private, which a directory on a FAT card cannot be
+export XDG_RUNTIME_DIR="/tmp/hyne-run"
+mkdir -p "$XDG_RUNTIME_DIR" && chmod 700 "$XDG_RUNTIME_DIR"
 
 # Hyne's handheld layout
 export HYNE_COMPACT=1
